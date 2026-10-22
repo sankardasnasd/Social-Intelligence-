@@ -1,0 +1,115 @@
+{% extends 'admin/admin_home sub.html' %}
+{% block body %}
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+    .fb {
+        --bg: #f5f7fd; --white: #fff; --ink: #1f2a4d; --muted: #5f6b8c; --line: #dde3f3;
+        --blue: #5f85ff; --blue-d: #4569e0; --mint: #5fd3b0; --peach: #ffab91; --lilac: #b79cff; --sun: #ffd27a; --flag: #ff7a7a;
+        --display: "Outfit", "Segoe UI", system-ui, sans-serif;
+        --body: "Manrope", "Segoe UI", system-ui, sans-serif;
+        --shadow: 0 20px 50px rgba(54, 73, 140, .14);
+        padding: 30px; min-height: 100vh; background: var(--bg); font-family: var(--body); color: var(--ink); box-sizing: border-box;
+    }
+    .fb *, .fb *::before, .fb *::after { box-sizing: border-box; }
+    .fb-list { max-width: 980px; }
+
+    /* Header */
+    .fb-head { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; margin-bottom: 26px; }
+    .fb-head h2 { font-family: var(--display); font-size: 1.9rem; font-weight: 700; letter-spacing: -.01em; margin: 0 0 8px; display: flex; align-items: center; gap: 12px; }
+    .fb-head h2 i { color: var(--blue); }
+    .fb-head p { margin: 0; color: var(--muted); font-size: .95rem; }
+    .fb-total { display: flex; align-items: center; gap: 14px; background: var(--white); border: 1px solid var(--line); padding: 12px 22px 12px 14px; border-radius: 20px; box-shadow: var(--shadow); }
+    .fb-total .ico { width: 44px; height: 44px; border-radius: 14px; display: grid; place-items: center; font-size: 18px; color: var(--blue-d); background: linear-gradient(135deg, #e7eeff, #dcf6ec); }
+    .fb-total span { display: block; font-size: .78rem; color: var(--muted); font-weight: 600; margin-bottom: 2px; }
+    .fb-total strong { font-family: var(--display); font-size: 1.7rem; line-height: 1; color: var(--blue-d); }
+
+    /* Feedback card */
+    .fb-card { position: relative; overflow: hidden; background: var(--white); border: 1px solid var(--line); border-radius: 28px; padding: 26px 28px 26px 32px; margin-bottom: 20px; box-shadow: var(--shadow); }
+    .fb-card::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 6px; background: var(--sun); }
+    .fb-card.good::before { background: var(--mint); }
+    .fb-card.low::before { background: var(--flag); }
+    .fb-top { display: flex; justify-content: space-between; align-items: center; gap: 15px; flex-wrap: wrap; margin-bottom: 18px; }
+    .fb-user { display: flex; align-items: center; gap: 14px; }
+    .fb-avatar { width: 46px; height: 46px; border-radius: 50%; display: grid; place-items: center; font-family: var(--display); font-weight: 700; font-size: 1.1rem; color: var(--blue-d); background: linear-gradient(135deg, #e7eeff, #efe7ff); box-shadow: 0 0 0 2px var(--line); flex: none; }
+    .fb-name { font-family: var(--display); font-size: 1.1rem; font-weight: 600; line-height: 1.2; }
+    .fb-date { font-size: .82rem; color: var(--muted); margin-top: 4px; }
+
+    .fb-rating { display: inline-flex; align-items: center; gap: 12px; padding: 8px 16px; border-radius: 16px; background: var(--bg); border: 1px solid var(--line); }
+    .fb-stars { font-size: 1.25rem; letter-spacing: 2px; line-height: 1; color: #f5b942; white-space: nowrap; }
+    .fb-stars .off { color: var(--line); }
+    .fb-score { font-family: var(--display); font-size: .9rem; font-weight: 700; color: var(--ink); }
+    .fb-score small { color: var(--muted); font-weight: 600; font-size: .8rem; }
+
+    .fb-text { background: var(--bg); border: 1.5px solid var(--line); border-radius: 16px; padding: 16px 18px; color: var(--ink); line-height: 1.7; white-space: pre-wrap; overflow-wrap: anywhere; }
+
+    /* Empty */
+    .fb-empty { text-align: center; background: var(--white); border: 1px solid var(--line); border-radius: 28px; padding: 48px 20px; color: var(--muted); box-shadow: var(--shadow); }
+    .fb-empty i { font-size: 34px; display: block; margin-bottom: 14px; color: var(--lilac); }
+    .fb-empty h3 { font-family: var(--display); color: var(--ink); margin: 0 0 8px; font-size: 1.3rem; font-weight: 600; }
+    .fb-empty p { margin: 0; }
+
+    @media (max-width: 600px) { .fb { padding: 20px 14px; } .fb-card { padding: 22px 18px 22px 24px; border-radius: 22px; } }
+</style>
+
+<div class="fb">
+<div class="fb-list">
+
+    <div class="fb-head">
+        <div>
+            <h2><i class="fa-solid fa-star-half-stroke"></i> View feedback</h2>
+            <p>View feedback and ratings submitted by users.</p>
+        </div>
+
+        <div class="fb-total">
+            <div class="ico"><i class="fa-solid fa-comment-dots"></i></div>
+            <div>
+                <span>Total feedback</span>
+                <strong>{{ feedbacks|length }}</strong>
+            </div>
+        </div>
+    </div>
+
+    {% for i in feedbacks %}
+
+    <div class="fb-card {% if i.rating >= 4 %}good{% elif i.rating <= 2 %}low{% endif %}">
+
+        <div class="fb-top">
+
+            <div class="fb-user">
+                <div class="fb-avatar">{{ i.user.name|first|upper }}</div>
+                <div>
+                    <div class="fb-name">{{ i.user.name }}</div>
+                    <div class="fb-date">Submitted on {{ i.created_at|date:"d M Y, h:i A" }}</div>
+                </div>
+            </div>
+
+            <div class="fb-rating" aria-label="Rating {{ i.rating }} out of 5">
+                <span class="fb-stars" aria-hidden="true">{% for star in "12345" %}{% if forloop.counter <= i.rating %}★{% else %}<span class="off">★</span>{% endif %}{% endfor %}</span>
+                <span class="fb-score">{{ i.rating }}<small>/5</small></span>
+            </div>
+
+        </div>
+
+        <div class="fb-text">{{ i.feedback_text }}</div>
+
+    </div>
+
+    {% empty %}
+
+    <div class="fb-empty">
+        <i class="fa-solid fa-comments"></i>
+        <h3>No feedback available</h3>
+        <p>User feedback will appear here.</p>
+    </div>
+
+    {% endfor %}
+
+</div>
+</div>
+
+{% endblock %}

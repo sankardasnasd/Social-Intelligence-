@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Admin dashboard | Social Intelligent and Safety Guard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script>document.documentElement.classList.add('js');</script>
+  <style>
+    :root {
+      --bg: #f5f7fd; --white: #fff; --ink: #1f2a4d; --muted: #5f6b8c; --line: #dde3f3;
+      --blue: #5f85ff; --blue-d: #4569e0; --mint: #5fd3b0; --peach: #ffab91; --lilac: #b79cff; --sun: #ffd27a; --flag: #ff7a7a;
+      --display: "Outfit", "Segoe UI", system-ui, sans-serif; --body: "Manrope", "Segoe UI", system-ui, sans-serif;
+      --shadow: 0 14px 36px rgba(54, 73, 140, .10);
+    }
+    *, *::before, *::after { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { margin: 0; font-family: var(--body); color: var(--ink); background: var(--bg); line-height: 1.55; }
+    a { color: inherit; text-decoration: none; }
+    h1, h2, h3 { font-family: var(--display); margin: 0; letter-spacing: -.01em; }
+    :focus-visible { outline: 3px solid var(--blue); outline-offset: 2px; }
+    .app { display: grid; grid-template-columns: 252px minmax(0, 1fr); min-height: 100vh; }
+
+    /* ---------- sidebar ---------- */
+    .side { position: sticky; top: 0; height: 100vh; background: var(--white); border-right: 1px solid var(--line); padding: 24px 16px; display: flex; flex-direction: column; gap: 6px; overflow-y: auto; }
+    .logo { display: flex; align-items: center; gap: 10px; font-family: var(--display); font-weight: 700; font-size: 1.05rem; padding: 0 10px 18px; }
+    .logo svg { width: 30px; height: 30px; animation: tilt 5s ease-in-out infinite; }
+    @keyframes tilt { 50% { transform: rotate(-8deg) scale(1.06); } }
+    .nav a { display: flex; align-items: center; gap: 12px; padding: 11px 12px; border-radius: 12px; color: var(--muted); font-weight: 600; font-size: .94rem; position: relative; transition: background .2s, color .2s, transform .2s; }
+    .nav a svg { width: 20px; height: 20px; flex: none; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+    .nav a:hover { background: #eef2ff; color: var(--ink); transform: translateX(4px); }
+    .nav a.on { background: linear-gradient(120deg, #e8eeff, #efe9ff); color: var(--blue-d); }
+    .nav a.on::before { content: ""; position: absolute; left: -16px; top: 10px; bottom: 10px; width: 4px; border-radius: 0 4px 4px 0; background: var(--blue); animation: grow .6s ease both; }
+    @keyframes grow { from { transform: scaleY(0); } }
+    .nav .count { margin-left: auto; background: var(--flag); color: #fff; font-size: .72rem; padding: 1px 8px; border-radius: 999px; animation: beat 2.4s ease-in-out infinite; }
+    @keyframes beat { 50% { transform: scale(1.15); } }
+    .out { margin-top: auto; }
+    .out a { color: #c2495a; } .out a:hover { background: #fff0f2; color: #c2495a; }
+
+    /* ---------- main ---------- */
+    .main { padding: 26px 34px 60px; min-width: 0; }
+    .top { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin-bottom: 26px; }
+    .top h1 { font-size: 1.7rem; } .top p { margin: 4px 0 0; color: var(--muted); }
+    .who { display: flex; align-items: center; gap: 14px; }
+    .live { display: flex; align-items: center; gap: 8px; font-size: .85rem; font-weight: 600; color: var(--muted); background: var(--white); border: 1px solid var(--line); border-radius: 999px; padding: 8px 14px; }
+    .live i { width: 9px; height: 9px; border-radius: 50%; background: var(--mint); animation: ping 2s infinite; }
+    @keyframes ping { 0% { box-shadow: 0 0 0 0 rgba(95,211,176,.7); } 70%, 100% { box-shadow: 0 0 0 9px rgba(95,211,176,0); } }
+    .avatar { width: 42px; height: 42px; border-radius: 50%; display: grid; place-items: center; color: #fff; font-family: var(--display); font-weight: 700; background: linear-gradient(135deg, var(--blue), var(--lilac)); }
+    .menu-btn { display: none; border: 1px solid var(--line); background: var(--white); border-radius: 12px; width: 42px; height: 42px; font-size: 1.2rem; cursor: pointer; }
+
+    .grid { display: grid; gap: 20px; }
+    .stats { grid-template-columns: repeat(4, 1fr); margin-bottom: 20px; }
+    .card { background: var(--white); border: 1px solid var(--line); border-radius: 22px; padding: 22px; box-shadow: var(--shadow); transition: transform .25s, box-shadow .25s; }
+    .card:hover { transform: translateY(-4px); box-shadow: 0 20px 44px rgba(54,73,140,.16); }
+    .card h3 { font-size: 1.05rem; margin-bottom: 4px; } .card .hint { color: var(--muted); font-size: .85rem; margin: 0 0 16px; }
+
+    .rv { transition: opacity .7s cubic-bezier(.2,.8,.2,1), transform .7s cubic-bezier(.2,.8,.2,1), box-shadow .25s; }
+    .js .rv { opacity: 0; transform: translateY(26px); } .js .rv.in { opacity: 1; transform: none; }
+    .js .rv.in:hover { transform: translateY(-4px); }
+
+    .stat { display: flex; gap: 16px; align-items: center; position: relative; overflow: hidden; }
+    .stat::after { content: ""; position: absolute; right: -30px; top: -30px; width: 100px; height: 100px; border-radius: 50%; background: var(--c); opacity: .14; animation: morph 9s ease-in-out infinite; }
+    @keyframes morph { 0%, 100% { border-radius: 60% 40% 55% 45%; } 50% { border-radius: 40% 60% 45% 55%; } }
+    .ico { width: 52px; height: 52px; border-radius: 16px; display: grid; place-items: center; flex: none; background: color-mix(in srgb, var(--c) 18%, white); color: var(--c); }
+    .ico svg { width: 26px; height: 26px; fill: none; stroke: currentColor; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; }
+    .stat b { display: block; font-family: var(--display); font-size: 1.85rem; line-height: 1.1; }
+    .stat span { color: var(--muted); font-size: .88rem; } .stat small { display: block; margin-top: 2px; font-size: .78rem; font-weight: 700; color: #2aa985; }
+    .stat small.bad { color: #d4566a; }
+
+    .row2 { grid-template-columns: 1.6fr 1fr; margin-bottom: 20px; }
+    .row3 { grid-template-columns: 1fr 1.5fr; margin-bottom: 20px; }
+    .row4 { grid-template-columns: 1.2fr 1fr; }
+
+    /* line chart */
+    .chart { width: 100%; height: auto; display: block; }
+    .chart .grid-l { stroke: var(--line); stroke-dasharray: 4 6; }
+    .chart .area { fill: url(#ar); opacity: 0; transition: opacity 1.2s .9s; } .in .chart .area { opacity: 1; }
+    .chart .ln { fill: none; stroke: var(--blue); stroke-width: 3.5; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 700; stroke-dashoffset: 700; transition: stroke-dashoffset 1.8s .2s ease; }
+    .in .chart .ln { stroke-dashoffset: 0; }
+    .chart .pt { fill: #fff; stroke: var(--blue); stroke-width: 3; opacity: 0; transition: opacity .4s; transition-delay: calc(var(--i) * .2s + .8s); } .in .chart .pt { opacity: 1; }
+    .chart text { font-size: 11px; fill: var(--muted); font-family: var(--body); }
+    .legend { display: flex; gap: 18px; font-size: .82rem; color: var(--muted); margin-top: 6px; }
+    .legend i { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 6px; }
+
+    /* donut */
+    .donut-wrap { display: flex; align-items: center; gap: 22px; flex-wrap: wrap; justify-content: center; }
+    .donut { position: relative; width: 150px; height: 150px; flex: none; }
+    .donut svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+    .donut circle { fill: none; stroke-width: 16; }
+    .donut .bgc { stroke: var(--line); }
+    .seg { stroke-dasharray: 0 339.3; transition: stroke-dasharray 1.4s cubic-bezier(.2,.8,.2,1); transition-delay: var(--dl); stroke-linecap: butt; }
+    .in .seg { stroke-dasharray: var(--len) 339.3; }
+    .donut b { position: absolute; inset: 0; display: grid; place-content: center; text-align: center; font-family: var(--display); font-size: 1.5rem; line-height: 1.1; }
+    .donut b small { font-family: var(--body); font-size: .72rem; font-weight: 500; color: var(--muted); }
+    .keys { list-style: none; margin: 0; padding: 0; font-size: .88rem; }
+    .keys li { display: flex; align-items: center; gap: 10px; padding: 5px 0; color: var(--muted); } .keys i { width: 11px; height: 11px; border-radius: 50%; } .keys strong { color: var(--ink); margin-left: auto; padding-left: 14px; }
+
+    /* topics */
+    .topic { margin-bottom: 14px; } .topic div { display: flex; justify-content: space-between; font-size: .9rem; font-weight: 600; margin-bottom: 5px; } .topic em { font-style: normal; color: var(--blue-d); font-family: var(--display); }
+    .meter { height: 10px; border-radius: 6px; background: #edf0fa; overflow: hidden; }
+    .meter span { display: block; height: 100%; width: var(--w); border-radius: 6px; background: linear-gradient(90deg, var(--blue), var(--lilac)); transform: scaleX(0); transform-origin: left; transition: transform 1.2s cubic-bezier(.2,.8,.2,1); transition-delay: calc(var(--i) * .12s + .3s); }
+    .in .meter span { transform: scaleX(1); } .meter span.hot { background: linear-gradient(90deg, var(--peach), var(--sun)); }
+
+    /* flagged table */
+    .scroll { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; font-size: .9rem; min-width: 560px; }
+    th { text-align: left; font-weight: 600; color: var(--muted); font-size: .8rem; padding: 0 10px 10px; }
+    td { padding: 12px 10px; border-top: 1px solid var(--line); vertical-align: middle; }
+    tbody tr { transition: background .2s; } tbody tr:hover { background: #f6f8ff; }
+    .js .in tbody tr { animation: slidein .6s both; } .in tbody tr:nth-child(1) { animation-delay: .3s; } .in tbody tr:nth-child(2) { animation-delay: .45s; } .in tbody tr:nth-child(3) { animation-delay: .6s; } .in tbody tr:nth-child(4) { animation-delay: .75s; }
+    @keyframes slidein { from { opacity: 0; transform: translateX(-20px); } }
+    .thumb { width: 38px; height: 50px; border-radius: 8px; display: block; background: linear-gradient(160deg, var(--c1), var(--c2)); }
+    .reel { display: flex; align-items: center; gap: 12px; font-weight: 600; } .reel small { display: block; color: var(--muted); font-weight: 500; }
+    .chip { display: inline-block; padding: 4px 11px; border-radius: 999px; font-size: .78rem; font-weight: 700; }
+    .chip.f { background: #ffe9e9; color: #c24b4b; } .chip.r { background: #fff4d6; color: #9a6b00; } .chip.ok { background: #e2f8f0; color: #1f8f6f; }
+    .btn { display: inline-block; padding: 8px 14px; border-radius: 10px; font-weight: 700; font-size: .82rem; font-family: inherit; border: 1.5px solid var(--line); background: var(--white); color: var(--ink); cursor: pointer; transition: background .2s, border-color .2s, transform .2s; }
+    .btn:hover { border-color: var(--blue); color: var(--blue-d); transform: translateY(-1px); }
+    .btn.solid { background: var(--blue); border-color: var(--blue); color: #fff; } .btn.solid:hover { background: var(--blue-d); color: #fff; }
+
+    /* queue */
+    .job { margin-bottom: 16px; } .job div { display: flex; justify-content: space-between; font-size: .88rem; font-weight: 600; margin-bottom: 6px; } .job small { color: var(--muted); font-weight: 500; }
+    .job .meter span { transform: none; width: 0; animation: load var(--t) ease-in-out infinite; background: linear-gradient(90deg, var(--mint), var(--blue)); }
+    @keyframes load { 0% { width: 0; } 85%, 100% { width: 100%; } }
+
+    /* complaints */
+    .msg { display: flex; gap: 12px; padding: 12px 0; border-top: 1px solid var(--line); align-items: flex-start; }
+    .msg:first-of-type { border-top: 0; }
+    .msg .av { width: 38px; height: 38px; border-radius: 50%; flex: none; display: grid; place-items: center; font-weight: 700; font-size: .85rem; color: #fff; background: var(--c); }
+    .msg p { margin: 0; font-size: .9rem; } .msg small { color: var(--muted); } .msg .btn { margin-left: auto; flex: none; }
+
+    @media (max-width: 1180px) { .stats { grid-template-columns: repeat(2, 1fr); } .row2, .row3, .row4 { grid-template-columns: 1fr; } }
+    @media (max-width: 900px) {
+      .app { grid-template-columns: 1fr; }
+      .side { position: fixed; z-index: 30; left: 0; top: 0; width: 262px; transform: translateX(-105%); transition: transform .3s; box-shadow: 10px 0 40px rgba(0,0,0,.12); }
+      .side.open { transform: none; } .menu-btn { display: block; } .main { padding: 20px 18px 48px; }
+    }
+    @media (max-width: 520px) { .stats { grid-template-columns: 1fr; } .live { display: none; } }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { animation: none !important; transition: none !important; }
+      .js .rv { opacity: 1; transform: none; } .chart .ln { stroke-dashoffset: 0; } .chart .area, .chart .pt { opacity: 1; } .meter span { transform: none; } .job .meter span { width: 70%; }
+      .seg { stroke-dasharray: var(--len) 339.3; }
+    }
+  </style>
+</head>
+<body>
+<div class="app">
+
+  <!-- ===== Sidebar. NOTE: change these URLs to match your urls.py ===== -->
+  <aside class="side" id="side" aria-label="Admin menu">
+    <a class="logo" href="/myapp/admin_home/">
+      <svg viewBox="0 0 32 32" aria-hidden="true"><defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#5f85ff"/><stop offset="1" stop-color="#5fd3b0"/></linearGradient></defs>
+        <path d="M16 2l11 4v9c0 7-5 12-11 15C10 27 5 22 5 15V6z" fill="url(#lg)"/><path d="M12 15l3 3 6-6" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Safety Guard
+    </a>
+    <nav class="nav">
+      <a class="on" href="/myapp/admin_home/"><svg viewBox="0 0 24 24"><path d="M3 11l9-8 9 8M5 10v10h5v-6h4v6h5V10"/></svg>Dashboard</a>
+      <a href="/myapp/manage_users/"><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c0-3.6 2.9-6 6.5-6s6.5 2.4 6.5 6M16 4.5a3.5 3.5 0 010 7M18 14.3c2.2.7 3.5 2.6 3.5 5.7"/></svg>Manage users</a>
+      <a href="/myapp/view_reels/"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="3"/><path d="M10 9l5 3-5 3z"/></svg>Uploaded reels</a>
+      <a href="/myapp/analysis_results/"><svg viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>Analysis results</a>
+      <a href="/myapp/flagged_content/"><svg viewBox="0 0 24 24"><path d="M5 21V4M5 4h12l-2 4 2 4H5"/></svg>Flagged content<span class="count">{{ flagged_count|default:"7" }}</span></a>
+      <a href="/myapp/restrictions/"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M5.6 5.6l12.8 12.8"/></svg>Restrictions</a>
+      <a href="/myapp/analytics/"><svg viewBox="0 0 24 24"><path d="M3 17l5-6 4 3 8-9M15 5h5v5"/></svg>Trends and engagement</a>
+      <a href="/myapp/view_complaints/"><svg viewBox="0 0 24 24"><path d="M4 5h16v11H9l-5 4z"/></svg>Complaints</a>
+      <a href="/myapp/view_feedback/"><svg viewBox="0 0 24 24"><path d="M12 3l2.7 5.5 6 .9-4.4 4.2 1 6-5.3-2.8-5.3 2.8 1-6L3.3 9.4l6-.9z"/></svg>Feedback</a>
+      <a href="/myapp/change_password/"><svg viewBox="0 0 24 24"><rect x="4" y="10" width="16" height="11" rx="3"/><path d="M8 10V7a4 4 0 018 0v3"/></svg>Change password</a>
+    </nav>
+    <nav class="nav out"><a href="/myapp/logout_page/"><svg viewBox="0 0 24 24"><path d="M9 4H5v16h4M16 8l4 4-4 4M20 12H9"/></svg>Log out</a></nav>
+  </aside>
+
+  <main class="main">
+    <header class="top">
+      <div style="display:flex;align-items:center;gap:14px">
+        <button class="menu-btn" id="menuBtn" aria-label="Open menu" aria-controls="side">&#9776;</button>
+        <div><h1 id="hello">Welcome back</h1><p id="today">Here is what is happening on the platform.</p></div>
+      </div>
+      <div class="who">
+        <div class="live"><i></i>Analysis engine online</div>
+        <div class="avatar" aria-hidden="true">{{ request.user.username|default:"Admin"|slice:":1"|upper }}</div>
+      </div>
+    </header>
+
+    <!-- Stat cards: replace the default values by passing context from your view -->
+    <section class="grid stats">
+      <div class="card stat rv" style="--c:#5f85ff"><div class="ico"><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c0-3.6 2.9-6 6.5-6s6.5 2.4 6.5 6M16 4.5a3.5 3.5 0 010 7M18 14.3c2.2.7 3.5 2.6 3.5 5.7"/></svg></div>
+        <div><b data-count="{{ total_users|default:'1284' }}">{{ total_users|default:"1284" }}</b><span>Total users</span><small>+12% this week</small></div></div>
+      <div class="card stat rv" style="--c:#b79cff;transition-delay:.08s"><div class="ico"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="3"/><path d="M10 9l5 3-5 3z"/></svg></div>
+        <div><b data-count="{{ total_reels|default:'1942' }}">{{ total_reels|default:"1942" }}</b><span>Reels uploaded</span><small>+96 today</small></div></div>
+      <div class="card stat rv" style="--c:#ff7a7a;transition-delay:.16s"><div class="ico"><svg viewBox="0 0 24 24"><path d="M5 21V4M5 4h12l-2 4 2 4H5"/></svg></div>
+        <div><b data-count="{{ flagged_count|default:'7' }}">{{ flagged_count|default:"7" }}</b><span>Flagged for review</span><small class="bad">Needs attention</small></div></div>
+      <div class="card stat rv" style="--c:#ffb64d;transition-delay:.24s"><div class="ico"><svg viewBox="0 0 24 24"><path d="M4 5h16v11H9l-5 4z"/></svg></div>
+        <div><b data-count="{{ open_complaints|default:'5' }}">{{ open_complaints|default:"5" }}</b><span>Open complaints</span><small class="bad">2 new</small></div></div>
+    </section>
+
+    <section class="grid row2">
+      <div class="card rv">
+        <h3>Engagement this week</h3><p class="hint">Likes, comments, shares and saves across all reels (sample data)</p>
+        <svg class="chart" viewBox="0 0 600 240" role="img" aria-label="Line chart of weekly engagement">
+          <defs><linearGradient id="ar" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5f85ff" stop-opacity=".28"/><stop offset="1" stop-color="#5f85ff" stop-opacity="0"/></linearGradient></defs>
+          <line class="grid-l" x1="0" x2="600" y1="40" y2="40"/><line class="grid-l" x1="0" x2="600" y1="100" y2="100"/><line class="grid-l" x1="0" x2="600" y1="160" y2="160"/>
+          <path class="area" d="M20 132 L113 106 L207 118 L300 78 L393 91 L487 38 L580 60 L580 200 L20 200Z"/>
+          <path class="ln" d="M20 132 L113 106 L207 118 L300 78 L393 91 L487 38 L580 60"/>
+          <circle class="pt" style="--i:0" cx="20" cy="132" r="5"/><circle class="pt" style="--i:1" cx="113" cy="106" r="5"/><circle class="pt" style="--i:2" cx="207" cy="118" r="5"/>
+          <circle class="pt" style="--i:3" cx="300" cy="78" r="5"/><circle class="pt" style="--i:4" cx="393" cy="91" r="5"/><circle class="pt" style="--i:5" cx="487" cy="38" r="5"/><circle class="pt" style="--i:6" cx="580" cy="60" r="5"/>
+          <text x="20" y="226" text-anchor="middle">Mon</text><text x="113" y="226" text-anchor="middle">Tue</text><text x="207" y="226" text-anchor="middle">Wed</text><text x="300" y="226" text-anchor="middle">Thu</text><text x="393" y="226" text-anchor="middle">Fri</text><text x="487" y="226" text-anchor="middle">Sat</text><text x="575" y="226" text-anchor="middle">Sun</text>
+        </svg>
+      </div>
+
+      <div class="card rv" style="transition-delay:.1s">
+        <h3>Safety results</h3><p class="hint">How uploaded reels were classified</p>
+        <div class="donut-wrap">
+          <div class="donut"><svg viewBox="0 0 150 150"><circle class="bgc" cx="75" cy="75" r="54"/>
+            <circle class="seg" style="--len:264.7;--dl:.2s" cx="75" cy="75" r="54" stroke="#5fd3b0"/>
+            <circle class="seg" style="--len:47.5;--dl:.6s;stroke-dashoffset:-264.7" cx="75" cy="75" r="54" stroke="#ffd27a"/>
+            <circle class="seg" style="--len:27.1;--dl:.9s;stroke-dashoffset:-312.2" cx="75" cy="75" r="54" stroke="#ff7a7a"/></svg>
+            <b><span data-count="{{ total_reels|default:'1942' }}">{{ total_reels|default:"1942" }}</span><small>reels</small></b></div>
+          <ul class="keys"><li><i style="background:#5fd3b0"></i>Safe<strong>78%</strong></li><li><i style="background:#ffd27a"></i>Needs review<strong>14%</strong></li><li><i style="background:#ff7a7a"></i>Flagged<strong>8%</strong></li></ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="grid row3">
+      <div class="card rv">
+        <h3>Trending topics</h3><p class="hint">Trend score by topic (sample data)</p>
+        <div class="topic"><div>Exam preparation<em>92</em></div><div class="meter"><span class="hot" style="--w:92%;--i:0"></span></div></div>
+        <div class="topic"><div>Study tips<em>87</em></div><div class="meter"><span class="hot" style="--w:87%;--i:1"></span></div></div>
+        <div class="topic"><div>Home cooking<em>78</em></div><div class="meter"><span style="--w:78%;--i:2"></span></div></div>
+        <div class="topic"><div>Fitness at home<em>74</em></div><div class="meter"><span style="--w:74%;--i:3"></span></div></div>
+        <div class="topic"><div>Travel stories<em>69</em></div><div class="meter"><span style="--w:69%;--i:4"></span></div></div>
+      </div>
+
+      <div class="card rv" style="transition-delay:.1s">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap"><div><h3>Flagged reels</h3><p class="hint">Latest reels waiting for your decision</p></div><a class="btn" href="/myapp/flagged_content/">View all</a></div>
+        <div class="scroll">
+          <table>
+            <thead><tr><th>Reel</th><th>Reason</th><th>Status</th><th></th></tr></thead>
+            <tbody>
+              {# Sample rows. Replace with a for loop over your flagged reels. #}
+              <tr><td><div class="reel"><span class="thumb" style="--c1:#ffb4a2;--c2:#b79cff"></span><div>Reel 2041<small>by user_arun</small></div></div></td><td>Vulgar language</td><td><span class="chip f">Flagged</span></td><td><a class="btn solid" href="#">Review</a></td></tr>
+              <tr><td><div class="reel"><span class="thumb" style="--c1:#9db6ff;--c2:#5fd3b0"></span><div>Reel 2038<small>by user_meera</small></div></div></td><td>Harmful content</td><td><span class="chip f">Flagged</span></td><td><a class="btn solid" href="#">Review</a></td></tr>
+              <tr><td><div class="reel"><span class="thumb" style="--c1:#ffd27a;--c2:#ffab91"></span><div>Reel 2033<small>by user_nikhil</small></div></div></td><td>Unsafe image</td><td><span class="chip r">Needs review</span></td><td><a class="btn solid" href="#">Review</a></td></tr>
+              <tr><td><div class="reel"><span class="thumb" style="--c1:#b79cff;--c2:#9db6ff"></span><div>Reel 2029<small>by user_anu</small></div></div></td><td>Inappropriate text</td><td><span class="chip ok">Restricted</span></td><td><a class="btn" href="#">Open</a></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section class="grid row4">
+      <div class="card rv">
+        <h3>Live analysis queue</h3><p class="hint">Reels being processed right now</p>
+        <div class="job"><div>reel_2044.mp4<small>Reading audio</small></div><div class="meter"><span style="--t:5s"></span></div></div>
+        <div class="job"><div>reel_2045.jpg<small>Extracting text</small></div><div class="meter"><span style="--t:7s"></span></div></div>
+        <div class="job"><div>reel_2046.mp4<small>Safety check</small></div><div class="meter"><span style="--t:9s"></span></div></div>
+      </div>
+
+      <div class="card rv" style="transition-delay:.1s">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:10px"><div><h3>Recent complaints</h3><p class="hint">Reply to users</p></div><a class="btn" href="/myapp/complaints/">View all</a></div>
+        <div class="msg"><span class="av" style="--c:#5f85ff">A</span><div><p>Reel removed without a reason.</p><small>user_arun, 2 hours ago</small></div><a class="btn solid" href="#">Reply</a></div>
+        <div class="msg"><span class="av" style="--c:#b79cff">M</span><div><p>Not able to upload audio files.</p><small>user_meera, yesterday</small></div><a class="btn solid" href="#">Reply</a></div>
+        <div class="msg"><span class="av" style="--c:#ff9b8a">N</span><div><p>Wrong topic shown in my analysis.</p><small>user_nikhil, 2 days ago</small></div><a class="btn solid" href="#">Reply</a></div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<script>
+  (function () {
+    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    // greeting + date
+    var h = new Date().getHours(), g = h < 12 ? 'Good morning' : h < 17 ? 'Good afternoon' : 'Good evening';
+    document.getElementById('hello').textContent = g + ', admin';
+    document.getElementById('today').textContent = new Date().toLocaleDateString(undefined, { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+
+    // mobile menu
+    var side = document.getElementById('side');
+    document.getElementById('menuBtn').addEventListener('click', function () { side.classList.toggle('open'); });
+    document.addEventListener('click', function (e) { if (side.classList.contains('open') && !side.contains(e.target) && e.target.id !== 'menuBtn') side.classList.remove('open'); });
+
+    // count up
+    function countUp(root) {
+      root.querySelectorAll('[data-count]').forEach(function (el) {
+        if (reduce) return;
+        var end = parseFloat(el.dataset.count); if (isNaN(end)) return; var t0 = null;
+        (function tick(t) { t0 = t0 || t; var p = Math.min((t - t0) / 1500, 1), e = 1 - Math.pow(1 - p, 3); el.textContent = Math.round(end * e).toLocaleString(); if (p < 1) requestAnimationFrame(tick); })(performance.now());
+      });
+    }
+    var items = document.querySelectorAll('.rv');
+    if ('IntersectionObserver' in window) {
+      var io = new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('in'); countUp(e.target); io.unobserve(e.target); } }); }, { threshold: 0.15 });
+      items.forEach(function (i) { io.observe(i); });
+    } else { items.forEach(function (i) { i.classList.add('in'); }); }
+  })();
+</script>
+</body>
+</html>

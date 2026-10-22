@@ -1,0 +1,265 @@
+{% extends 'admin/admin_home sub.html' %}
+{% block body %}
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/2.2.2/css/dataTables.dataTables.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+  .vr {
+    --bg: #f5f7fd; --white: #fff; --ink: #1f2a4d; --muted: #5f6b8c; --line: #dde3f3;
+    --blue: #5f85ff; --blue-d: #4569e0; --mint: #5fd3b0; --peach: #ffab91; --lilac: #b79cff; --sun: #ffd27a; --flag: #ff7a7a;
+    --display: "Outfit", "Segoe UI", system-ui, sans-serif;
+    --body: "Manrope", "Segoe UI", system-ui, sans-serif;
+    --shadow: 0 20px 50px rgba(54, 73, 140, .14);
+    padding: 30px; min-height: 100vh; background: var(--bg); font-family: var(--body); color: var(--ink); box-sizing: border-box;
+  }
+  .vr *, .vr *::before, .vr *::after { box-sizing: border-box; }
+  .vr h2, .vr h3 { font-family: var(--display); margin: 0; letter-spacing: -.01em; }
+  .vr :focus-visible { outline: 3px solid var(--blue); outline-offset: 3px; }
+
+  /* Header */
+  .vr-head { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; margin-bottom: 25px; }
+  .vr-head h2 { font-size: 1.9rem; font-weight: 700; margin-bottom: 8px; display: flex; align-items: center; gap: 12px; }
+  .vr-head h2 i { color: var(--blue); }
+  .vr-head p { margin: 0; color: var(--muted); font-size: .95rem; }
+  .vr-total { display: flex; align-items: center; gap: 14px; background: var(--white); border: 1px solid var(--line); padding: 12px 22px 12px 14px; border-radius: 20px; box-shadow: var(--shadow); }
+  .vr-total .ico { width: 44px; height: 44px; border-radius: 14px; display: grid; place-items: center; font-size: 18px; color: var(--blue-d); background: linear-gradient(135deg, #e7eeff, #dcf6ec); }
+  .vr-total span { display: block; font-size: .78rem; color: var(--muted); font-weight: 600; margin-bottom: 2px; }
+  .vr-total strong { font-family: var(--display); font-size: 1.7rem; line-height: 1; color: var(--blue-d); }
+
+  /* Card */
+  .vr-card { background: var(--white); border: 1px solid var(--line); border-radius: 28px; overflow: hidden; box-shadow: var(--shadow); animation: vrEnter .8s cubic-bezier(.2,.8,.2,1) both; }
+  @keyframes vrEnter { from { opacity: 0; transform: translateY(24px) scale(.99); } }
+  .vr-card-head { padding: 22px 26px; border-bottom: 1px solid var(--line); background: linear-gradient(150deg, #f1f5ff, #f6f1ff 60%, #eefaf5); }
+  .vr-card-head h3 { font-size: 1.1rem; font-weight: 600; display: flex; align-items: center; gap: 10px; }
+  .vr-card-head h3 i { color: var(--mint); }
+  .vr-card-body { padding: 22px 26px; overflow-x: auto; }
+
+  /* Table */
+  .vr table.vr-table { width: 100%; border-collapse: collapse; text-align: left; }
+  .vr-table thead th { padding: 14px; font-size: .78rem; font-weight: 700; color: var(--muted); background: var(--bg); border-bottom: 1.5px solid var(--line) !important; white-space: nowrap; }
+  .vr-table thead th:first-child { border-radius: 12px 0 0 12px; } .vr-table thead th:last-child { border-radius: 0 12px 12px 0; }
+  .vr-table tbody td { padding: 12px 14px; font-size: .86rem; color: var(--muted); border-bottom: 1px solid var(--line) !important; vertical-align: middle; }
+  .vr-table tbody tr { transition: background .2s; }
+  .vr-table tbody tr:hover { background: #f1f5ff; }
+  .vr-table tbody tr:last-child td { border-bottom: 0 !important; }
+  .vr-name { font-weight: 700; color: var(--ink) !important; white-space: nowrap; }
+  .vr-nowrap { white-space: nowrap; }
+  .vr-dim { color: #8a94b3; }
+  .vr-media { width: 100px; height: 115px; object-fit: cover; border-radius: 16px; background: #1f2a4d; display: block; box-shadow: 0 0 0 2px #fff, 0 0 0 3px var(--line); }
+  .vr-audio { width: 180px; display: block; }
+  .vr-link { color: var(--blue-d); font-weight: 700; font-size: .85rem; text-decoration: none; }
+  .vr-link:hover { text-decoration: underline; }
+  .vr-caption { min-width: 150px; }
+  .vr-place { min-width: 110px; }
+  .vr-type { display: inline-block; padding: 4px 10px; border-radius: 10px; font-size: .78rem; font-weight: 600; color: var(--blue-d); background: #eef3ff; }
+  .vr-views { font-weight: 700; color: var(--blue-d) !important; white-space: nowrap; }
+  .vr-views i { margin-right: 6px; }
+
+  .vr-pill { display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: 20px; font-size: .75rem; font-weight: 700; }
+  .vr-pill::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: currentColor; }
+  .vr-pill.ok { background: #e9faf3; color: #1f7a5c; border: 1px solid #b9ecd9; }
+  .vr-pill.no { background: #fff0f0; color: #a63b3b; border: 1px solid #ffc9c9; }
+  .vr-pill.review { background: #fff6e0; color: #8a5a00; border: 1px solid #ffe3a3; }
+
+  .vr-proc { display: inline-flex; align-items: center; gap: 7px; font-size: .8rem; font-weight: 700; }
+  .vr-proc::before { content: ""; width: 9px; height: 9px; border-radius: 50%; background: currentColor; }
+  .vr-proc.done { color: #1f7a5c; } .vr-proc.fail { color: #a63b3b; } .vr-proc.run { color: var(--blue-d); } .vr-proc.wait { color: #8a5a00; }
+  .vr-proc.run::before { animation: vrPulse 1.4s ease-in-out infinite; }
+  @keyframes vrPulse { 50% { opacity: .25; transform: scale(.7); } }
+
+  .vr-empty { padding: 40px 20px !important; text-align: center; color: var(--muted); }
+  .vr-empty i { font-size: 32px; display: block; margin-bottom: 12px; color: var(--lilac); }
+
+  /* DataTables controls */
+  .vr .dt-container .dt-search, .vr .dt-container .dt-length { color: var(--muted); font-size: .88rem; font-weight: 600; }
+  .vr .dt-container .dt-search input, .vr .dt-container .dt-length select { font: inherit; color: var(--ink); background: var(--bg); border: 1.5px solid var(--line); border-radius: 12px; padding: 8px 12px; transition: border-color .2s, box-shadow .2s, background .2s; }
+  .vr .dt-container .dt-search input { min-width: 240px; margin-left: 8px; }
+  .vr .dt-container .dt-search input:hover, .vr .dt-container .dt-length select:hover { border-color: #b9c4e6; }
+  .vr .dt-container .dt-search input:focus, .vr .dt-container .dt-length select:focus { outline: none; background: #fff; border-color: var(--blue); box-shadow: 0 0 0 4px rgba(95,133,255,.18); }
+  .vr .dt-container .dt-info { color: var(--muted); font-size: .85rem; }
+  .vr .dt-container .dt-paging .dt-paging-button { font: inherit; font-weight: 600; font-size: .85rem; color: var(--muted) !important; border: 1.5px solid transparent !important; border-radius: 10px !important; background: transparent !important; }
+  .vr .dt-container .dt-paging .dt-paging-button:hover { color: var(--blue-d) !important; background: #e9efff !important; border-color: transparent !important; }
+  .vr .dt-container .dt-paging .dt-paging-button.current, .vr .dt-container .dt-paging .dt-paging-button.current:hover { color: #fff !important; background: linear-gradient(120deg, var(--blue-d), #8f7bff) !important; box-shadow: 0 6px 14px rgba(95,133,255,.38); }
+  .vr .dt-container .dt-paging .dt-paging-button.disabled { opacity: .45; }
+  .vr table.dataTable thead > tr > th.dt-orderable-asc:hover, .vr table.dataTable thead > tr > th.dt-orderable-desc:hover { outline: none; background: #e9efff; }
+  .vr table.dataTable thead .dt-column-order::before, .vr table.dataTable thead .dt-column-order::after { color: var(--blue-d); }
+
+  @media (max-width: 600px) { .vr { padding: 20px 14px; } .vr-card-body { padding: 16px 12px; } .vr .dt-container .dt-search input { min-width: 0; width: 100%; margin: 8px 0 0; } }
+  @media (prefers-reduced-motion: reduce) { .vr *, .vr *::before, .vr *::after { animation: none !important; transition: none !important; } }
+</style>
+
+<div class="vr">
+
+    <!-- Header -->
+    <div class="vr-head">
+        <div>
+            <h2><i class="fa-solid fa-clapperboard"></i> View reels</h2>
+            <p>View uploaded reels and monitor their content safety status.</p>
+        </div>
+
+        <div class="vr-total">
+            <div class="ico"><i class="fa-solid fa-film"></i></div>
+            <div>
+                <span>Total reels</span>
+                <strong>{{ reels|length }}</strong>
+            </div>
+        </div>
+    </div>
+
+    <!-- Table -->
+    <div class="vr-card">
+
+        <div class="vr-card-head">
+            <h3><i class="fa-solid fa-video"></i> Uploaded reels</h3>
+        </div>
+
+        <div class="vr-card-body">
+            <table id="reelsTable" class="vr-table">
+
+                <thead>
+                    <tr>
+                        <th>Sl No</th>
+                        <th>Media</th>
+                        <th>Uploaded By</th>
+                        <th>Caption</th>
+                        <th>Type</th>
+                        <th>Location</th>
+                        <th>Restriction</th>
+                        <th>Processing</th>
+                        <th>Views</th>
+                        <th>Uploaded Date</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for reel in reels %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+
+                        <td>
+                            {% if reel.media_file %}
+                                {% if reel.media_type == 'video' %}
+                                    <video controls preload="metadata" class="vr-media">
+                                        <source src="{{ reel.media_file.url }}">
+                                        Your browser does not support video.
+                                    </video>
+                                {% elif reel.media_type == 'image' %}
+                                    <a href="{{ reel.media_file.url }}" target="_blank" rel="noopener noreferrer">
+                                        <img src="{{ reel.media_file.url }}" alt="Reel image" class="vr-media">
+                                    </a>
+                                {% elif reel.media_type == 'audio' %}
+                                    <audio controls preload="none" class="vr-audio">
+                                        <source src="{{ reel.media_file.url }}">
+                                        Your browser does not support audio.
+                                    </audio>
+                                {% else %}
+                                    <a href="{{ reel.media_file.url }}" target="_blank" rel="noopener noreferrer" class="vr-link">Open media</a>
+                                {% endif %}
+                            {% else %}
+                                <span class="vr-dim">No media</span>
+                            {% endif %}
+                        </td>
+
+                        <td class="vr-name">{{ reel.user.name }}</td>
+
+                        <td class="vr-caption">
+                            {% if reel.caption %}
+                                {{ reel.caption|truncatechars:80 }}
+                            {% else %}
+                                <span class="vr-dim">No caption</span>
+                            {% endif %}
+                        </td>
+
+                        <td><span class="vr-type">{{ reel.get_media_type_display }}</span></td>
+
+                        <td class="vr-place">
+                            {{ reel.place|default:"-" }}{% if reel.district %}, {{ reel.district }}{% endif %}
+                        </td>
+
+                        <td class="vr-nowrap">
+                            {% if reel.restriction_status == 'approved' %}
+                                <span class="vr-pill ok">Approved</span>
+                            {% elif reel.restriction_status == 'restricted' %}
+                                <span class="vr-pill no">Restricted</span>
+                            {% else %}
+                                <span class="vr-pill review">Under Review</span>
+                            {% endif %}
+                        </td>
+
+                        <td class="vr-nowrap">
+                            {% if reel.processing_status == 'completed' %}
+                                <span class="vr-proc done">Completed</span>
+                            {% elif reel.processing_status == 'failed' %}
+                                <span class="vr-proc fail">Failed</span>
+                            {% elif reel.processing_status == 'processing' %}
+                                <span class="vr-proc run">Processing</span>
+                            {% else %}
+                                <span class="vr-proc wait">Pending</span>
+                            {% endif %}
+                        </td>
+
+                        <td class="vr-views"><i class="fa-solid fa-eye"></i>{{ reel.view_count }}</td>
+
+                        <td class="vr-nowrap" data-order="{{ reel.created_at|date:'Y-m-d H:i:s' }}">
+                            {{ reel.created_at|date:"d M Y, h:i A" }}
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="10" class="vr-empty">
+                            <i class="fa-solid fa-clapperboard"></i>
+                            No reels have been uploaded yet.
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+
+            </table>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="https://cdn.datatables.net/2.2.2/js/dataTables.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $('#reelsTable').DataTable({
+            pageLength: 10,
+            lengthMenu: [5, 10, 25, 50, 100],
+            searching: true,
+            ordering: true,
+            paging: true,
+            info: true,
+            order: [[9, 'desc']],
+            columnDefs: [
+                {
+                    targets: [0, 1],
+                    searchable: false,
+                    orderable: false
+                }
+            ],
+            language: {
+                search: "Search reels:",
+                searchPlaceholder: "Caption, user, district, status...",
+                lengthMenu: "Show _MENU_ reels",
+                info: "Showing _START_ to _END_ of _TOTAL_ reels",
+                infoEmpty: "No reels available",
+                zeroRecords: "No matching reels found",
+                emptyTable: "No reels uploaded yet",
+                paginate: {
+                    first: "First",
+                    last: "Last",
+                    next: "Next",
+                    previous: "Previous"
+                }
+            }
+        });
+    });
+</script>
+
+{% endblock %}

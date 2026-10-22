@@ -1,0 +1,206 @@
+{% extends 'admin/admin_home sub.html' %}
+{% block body %}
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/2.2.2/css/dataTables.dataTables.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+  .mu {
+    --bg: #f5f7fd; --white: #fff; --ink: #1f2a4d; --muted: #5f6b8c; --line: #dde3f3;
+    --blue: #5f85ff; --blue-d: #4569e0; --mint: #5fd3b0; --peach: #ffab91; --lilac: #b79cff; --sun: #ffd27a; --flag: #ff7a7a;
+    --display: "Outfit", "Segoe UI", system-ui, sans-serif;
+    --body: "Manrope", "Segoe UI", system-ui, sans-serif;
+    --shadow: 0 20px 50px rgba(54, 73, 140, .14);
+    padding: 30px; min-height: 100vh; background: var(--bg); font-family: var(--body); color: var(--ink); box-sizing: border-box;
+  }
+  .mu *, .mu *::before, .mu *::after { box-sizing: border-box; }
+  .mu h2, .mu h3 { font-family: var(--display); margin: 0; letter-spacing: -.01em; }
+  .mu :focus-visible { outline: 3px solid var(--blue); outline-offset: 3px; }
+
+  /* Header */
+  .mu-head { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; margin-bottom: 25px; }
+  .mu-head h2 { font-size: 1.9rem; font-weight: 700; margin-bottom: 8px; display: flex; align-items: center; gap: 12px; }
+  .mu-head h2 i { color: var(--blue); }
+  .mu-head p { margin: 0; color: var(--muted); font-size: .95rem; }
+  .mu-total { display: flex; align-items: center; gap: 14px; background: var(--white); border: 1px solid var(--line); padding: 12px 22px 12px 14px; border-radius: 20px; box-shadow: var(--shadow); }
+  .mu-total .ico { width: 44px; height: 44px; border-radius: 14px; display: grid; place-items: center; font-size: 18px; color: var(--blue-d); background: linear-gradient(135deg, #e7eeff, #dcf6ec); }
+  .mu-total span { display: block; font-size: .78rem; color: var(--muted); font-weight: 600; margin-bottom: 2px; }
+  .mu-total strong { font-family: var(--display); font-size: 1.7rem; line-height: 1; color: var(--blue-d); }
+
+  /* Card */
+  .mu-card { background: var(--white); border: 1px solid var(--line); border-radius: 28px; overflow: hidden; box-shadow: var(--shadow); animation: muEnter .8s cubic-bezier(.2,.8,.2,1) both; }
+  @keyframes muEnter { from { opacity: 0; transform: translateY(24px) scale(.99); } }
+  .mu-card-head { padding: 22px 26px; border-bottom: 1px solid var(--line); background: linear-gradient(150deg, #f1f5ff, #f6f1ff 60%, #eefaf5); }
+  .mu-card-head h3 { font-size: 1.1rem; font-weight: 600; display: flex; align-items: center; gap: 10px; }
+  .mu-card-head h3 i { color: var(--mint); }
+  .mu-card-body { padding: 22px 26px; overflow-x: auto; }
+
+  /* Table */
+  .mu table.mu-table { width: 100%; border-collapse: collapse; text-align: left; }
+  .mu-table thead th { padding: 14px; font-size: .78rem; font-weight: 700; color: var(--muted); background: var(--bg); border-bottom: 1.5px solid var(--line) !important; white-space: nowrap; }
+  .mu-table thead th:first-child { border-radius: 12px 0 0 12px; } .mu-table thead th:last-child { border-radius: 0 12px 12px 0; }
+  .mu-table tbody td { padding: 12px 14px; font-size: .88rem; color: var(--muted); border-bottom: 1px solid var(--line) !important; vertical-align: middle; }
+  .mu-table tbody tr { transition: background .2s; }
+  .mu-table tbody tr:hover { background: #f1f5ff; }
+  .mu-table tbody tr:last-child td { border-bottom: 0 !important; }
+  .mu-name { font-weight: 700; color: var(--ink) !important; white-space: nowrap; }
+  .mu-nowrap { white-space: nowrap; }
+  .mu-avatar { width: 44px; height: 44px; border-radius: 50%; object-fit: cover; border: 2px solid #fff; box-shadow: 0 0 0 2px var(--line); display: block; }
+  .mu-initial { width: 44px; height: 44px; border-radius: 50%; display: grid; place-items: center; font-family: var(--display); font-weight: 700; font-size: 1.05rem; color: var(--blue-d); background: linear-gradient(135deg, #e7eeff, #efe7ff); box-shadow: 0 0 0 2px var(--line); }
+  .mu-pill { display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: 20px; font-size: .75rem; font-weight: 700; }
+  .mu-pill.ok { background: #e9faf3; color: #1f7a5c; border: 1px solid #b9ecd9; }
+  .mu-pill.off { background: #fff0f0; color: #a63b3b; border: 1px solid #ffc9c9; }
+  .mu-empty { padding: 40px 20px !important; text-align: center; color: var(--muted); }
+  .mu-empty i { font-size: 32px; display: block; margin-bottom: 12px; color: var(--lilac); }
+
+  /* DataTables controls */
+  .mu .dt-container .dt-search, .mu .dt-container .dt-length { color: var(--muted); font-size: .88rem; font-weight: 600; }
+  .mu .dt-container .dt-search input, .mu .dt-container .dt-length select { font: inherit; color: var(--ink); background: var(--bg); border: 1.5px solid var(--line); border-radius: 12px; padding: 8px 12px; transition: border-color .2s, box-shadow .2s, background .2s; }
+  .mu .dt-container .dt-search input { min-width: 240px; margin-left: 8px; }
+  .mu .dt-container .dt-search input:hover, .mu .dt-container .dt-length select:hover { border-color: #b9c4e6; }
+  .mu .dt-container .dt-search input:focus, .mu .dt-container .dt-length select:focus { outline: none; background: #fff; border-color: var(--blue); box-shadow: 0 0 0 4px rgba(95,133,255,.18); }
+  .mu .dt-container .dt-info { color: var(--muted); font-size: .85rem; }
+  .mu .dt-container .dt-paging .dt-paging-button { font: inherit; font-weight: 600; font-size: .85rem; color: var(--muted) !important; border: 1.5px solid transparent !important; border-radius: 10px !important; background: transparent !important; }
+  .mu .dt-container .dt-paging .dt-paging-button:hover { color: var(--blue-d) !important; background: #e9efff !important; border-color: transparent !important; }
+  .mu .dt-container .dt-paging .dt-paging-button.current, .mu .dt-container .dt-paging .dt-paging-button.current:hover { color: #fff !important; background: linear-gradient(120deg, var(--blue-d), #8f7bff) !important; box-shadow: 0 6px 14px rgba(95,133,255,.38); }
+  .mu .dt-container .dt-paging .dt-paging-button.disabled { opacity: .45; }
+  .mu table.dataTable thead > tr > th.dt-orderable-asc:hover, .mu table.dataTable thead > tr > th.dt-orderable-desc:hover { outline: none; background: #e9efff; }
+  .mu table.dataTable thead .dt-column-order::before, .mu table.dataTable thead .dt-column-order::after { color: var(--blue-d); }
+
+  @media (max-width: 600px) { .mu { padding: 20px 14px; } .mu-card-body { padding: 16px 12px; } .mu .dt-container .dt-search input { min-width: 0; width: 100%; margin: 8px 0 0; } }
+  @media (prefers-reduced-motion: reduce) { .mu *, .mu *::before, .mu *::after { animation: none !important; transition: none !important; } }
+</style>
+
+<div class="mu">
+
+    <!-- Header -->
+    <div class="mu-head">
+        <div>
+            <h2><i class="fa-solid fa-users"></i> Manage users</h2>
+            <p>View registered users and their profile information.</p>
+        </div>
+
+        <div class="mu-total">
+            <div class="ico"><i class="fa-solid fa-user-group"></i></div>
+            <div>
+                <span>Total users</span>
+                <strong>{{ users|length }}</strong>
+            </div>
+        </div>
+    </div>
+
+    <!-- Table card -->
+    <div class="mu-card">
+
+        <div class="mu-card-head">
+            <h3><i class="fa-solid fa-address-book"></i> Registered user details</h3>
+        </div>
+
+        <div class="mu-card-body">
+            <table id="usersTable" class="mu-table">
+
+                <thead>
+                    <tr>
+                        <th>Sl No</th>
+                        <th>Profile</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>Place</th>
+                        <th>District</th>
+                        <th>Region</th>
+                        <th>Status</th>
+                        <th>Joined Date</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for user in users %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+
+                        <td>
+                            {% if user.profile_picture %}
+                                <img src="{{ user.profile_picture.url }}" alt="Profile picture" class="mu-avatar">
+                            {% else %}
+                                <div class="mu-initial">{{ user.name|first|upper }}</div>
+                            {% endif %}
+                        </td>
+
+                        <td class="mu-name">{{ user.name }}</td>
+                        <td>{{ user.email }}</td>
+                        <td class="mu-nowrap">{{ user.phone }}</td>
+                        <td>{{ user.place }}</td>
+                        <td>{{ user.district }}</td>
+                        <td>{{ user.region }}</td>
+
+                        <td class="mu-nowrap">
+                            {% if user.status|lower == 'active' %}
+                                <span class="mu-pill ok"><i class="fa-solid fa-circle-check"></i> Active</span>
+                            {% else %}
+                                <span class="mu-pill off"><i class="fa-solid fa-circle-xmark"></i> {{ user.status|title }}</span>
+                            {% endif %}
+                        </td>
+
+                        <td class="mu-nowrap" data-order="{{ user.created_at|date:'Y-m-d H:i:s' }}">
+                            {{ user.created_at|date:"d M Y" }}
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="10" class="mu-empty">
+                            <i class="fa-solid fa-users"></i>
+                            No registered users found.
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+
+            </table>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="https://cdn.datatables.net/2.2.2/js/dataTables.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $('#usersTable').DataTable({
+            pageLength: 10,
+            lengthMenu: [5, 10, 25, 50, 100],
+            searching: true,
+            ordering: true,
+            paging: true,
+            info: true,
+            order: [[9, 'desc']],
+            language: {
+                search: "Search users:",
+                searchPlaceholder: "Name, email, phone, district...",
+                lengthMenu: "Show _MENU_ users",
+                info: "Showing _START_ to _END_ of _TOTAL_ users",
+                infoEmpty: "No users available",
+                zeroRecords: "No matching users found",
+                emptyTable: "No registered users found",
+                paginate: {
+                    first: "First",
+                    last: "Last",
+                    next: "Next",
+                    previous: "Previous"
+                }
+            },
+            columnDefs: [
+                {
+                    targets: [0, 1],
+                    searchable: false,
+                    orderable: false
+                }
+            ]
+        });
+    });
+</script>
+
+{% endblock %}

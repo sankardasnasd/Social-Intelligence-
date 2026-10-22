@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Admin sign in | Social Intelligent and Safety Guard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f5f7fd; --white: #fff; --ink: #1f2a4d; --muted: #5f6b8c; --line: #dde3f3;
+      --blue: #5f85ff; --blue-d: #4569e0; --mint: #5fd3b0; --peach: #ffab91; --lilac: #b79cff; --sun: #ffd27a; --flag: #ff7a7a;
+      --display: "Outfit", "Segoe UI", system-ui, sans-serif;
+      --body: "Manrope", "Segoe UI", system-ui, sans-serif;
+      --shadow: 0 20px 50px rgba(54, 73, 140, .14);
+    }
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body { height: 100%; margin: 0; }
+    body { font-family: var(--body); color: var(--ink); background: var(--bg); display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); }
+    h1, h2 { font-family: var(--display); margin: 0; letter-spacing: -.01em; }
+    :focus-visible { outline: 3px solid var(--blue); outline-offset: 3px; }
+
+    /* ============ Left: animated scene ============ */
+    .side { position: relative; overflow: hidden; padding: 40px 48px; display: flex; flex-direction: column; justify-content: space-between;
+            background: linear-gradient(150deg, #e7eeff, #efe7ff 55%, #dcf6ec); background-size: 200% 200%; animation: grad 14s ease-in-out infinite; }
+    @keyframes grad { 50% { background-position: 100% 100%; } }
+    .side > * { position: relative; z-index: 2; }
+    .brand { display: flex; align-items: center; gap: 10px; font-family: var(--display); font-weight: 700; font-size: 1.1rem; }
+    .brand svg { width: 30px; height: 30px; animation: tilt 5s ease-in-out infinite; }
+    @keyframes tilt { 50% { transform: rotate(-8deg) scale(1.06); } }
+    .side h2 { font-size: clamp(1.5rem, 2.5vw, 2.2rem); line-height: 1.15; max-width: 18ch; margin-bottom: 10px; }
+    .side p { margin: 0; color: var(--muted); max-width: 40ch; line-height: 1.6; }
+
+    .blob { position: absolute !important; z-index: 1 !important; border-radius: 50%; filter: blur(2px); animation: morph 12s ease-in-out infinite, turn 36s linear infinite; }
+    .blob.b1 { width: 340px; height: 340px; left: 50%; top: 46%; margin: -170px 0 0 -170px; background: linear-gradient(135deg, #c9d8ff, #e0d4ff 60%, #c7f3e3); }
+    .blob.b2 { width: 240px; height: 240px; left: 56%; top: 52%; margin: -120px 0 0 -60px; background: linear-gradient(135deg, #ffe0d4, #fff0c8); opacity: .8; animation-direction: alternate, reverse; animation-duration: 15s, 44s; }
+    @keyframes morph { 0%, 100% { border-radius: 60% 40% 55% 45% / 50% 60% 40% 50%; } 50% { border-radius: 40% 60% 45% 55% / 60% 40% 60% 40%; } }
+    @keyframes turn { to { transform: rotate(360deg); } }
+
+    .stage { position: relative; width: 100%; max-width: 520px; height: 420px; margin: 0 auto; }
+    .phone { position: absolute; left: 50%; top: 0; width: 184px; height: 368px; margin-left: -92px; border-radius: 30px; overflow: hidden;
+             border: 6px solid #fff; background: #fff; box-shadow: var(--shadow), 0 0 0 1px var(--line); animation: bob 6s ease-in-out infinite; }
+    .phone svg { display: block; width: 100%; height: 100%; }
+    @keyframes bob { 50% { transform: translateY(-12px); } }
+    .scan { position: absolute; left: 0; right: 0; height: 4px; top: 0; z-index: 4; background: var(--mint); box-shadow: 0 0 16px 4px var(--mint); animation: sweep 4s linear infinite, tone 12s steps(1) infinite; }
+    @keyframes sweep { from { top: 2%; } to { top: 98%; } }
+    @keyframes tone { 0% { background: var(--mint); box-shadow: 0 0 16px 4px var(--mint); } 33.4% { background: var(--sun); box-shadow: 0 0 16px 4px var(--sun); } 66.7% { background: var(--flag); box-shadow: 0 0 16px 4px var(--flag); } }
+    .box { position: absolute; z-index: 3; border: 2px solid var(--blue); border-radius: 8px; opacity: 0; animation: detect 4s ease-out infinite; }
+    .box span { position: absolute; left: -2px; top: -20px; background: var(--blue); color: #fff; font-size: 10px; font-weight: 700; padding: 1px 6px; border-radius: 5px; white-space: nowrap; }
+    .box.person { left: 46px; top: 128px; width: 82px; height: 138px; animation-delay: .9s; }
+    .box.text { left: 20px; top: 64px; width: 134px; height: 26px; animation-delay: 1.8s; }
+    @keyframes detect { 0% { opacity: 0; transform: scale(1.15); } 12%, 85% { opacity: 1; transform: scale(1); } 100% { opacity: 0; } }
+
+    .fc { position: absolute; z-index: 5; background: rgba(255,255,255,.92); backdrop-filter: blur(8px); border: 1px solid var(--line); border-radius: 18px; box-shadow: var(--shadow); font-size: .8rem; animation: float 6s ease-in-out infinite; }
+    @keyframes float { 50% { translate: 0 -10px; } }
+    .fc h4 { margin: 0 0 8px; font-family: var(--display); font-size: .8rem; color: var(--muted); font-weight: 600; }
+    .c-audio { left: 0; top: 30px; width: 164px; padding: 14px; }
+    .c-trend { right: 0; top: 60px; width: 156px; padding: 14px; animation-delay: -2s; }
+    .c-verdict { left: 10px; bottom: 56px; padding: 10px 16px; display: flex; align-items: center; gap: 9px; font-weight: 700; animation-delay: -3s; }
+    .c-reach { right: 6px; bottom: 20px; padding: 10px 16px; font-weight: 600; animation-delay: -1s; } .c-reach b { color: var(--blue-d); }
+    .wave { display: flex; align-items: center; gap: 3px; height: 30px; margin-bottom: 8px; }
+    .wave i { flex: 1; height: 100%; background: linear-gradient(var(--blue), var(--lilac)); border-radius: 3px; transform: scaleY(.2); animation: bar 1.1s ease-in-out infinite; animation-delay: var(--d); }
+    @keyframes bar { 50% { transform: scaleY(1); } }
+    .says div { opacity: 0; animation: say 4s ease-out infinite; margin-top: 2px; }
+    .says div:nth-child(1) { animation-delay: 1.2s; } .says div:nth-child(2) { animation-delay: 2s; } .says div:nth-child(3) { animation-delay: 2.8s; }
+    @keyframes say { 0% { opacity: 0; transform: translateY(5px); } 10%, 85% { opacity: 1; transform: none; } 100% { opacity: 0; } }
+    .c-trend svg { display: block; width: 100%; height: 50px; }
+    .c-trend .path { stroke-dasharray: 220; stroke-dashoffset: 220; animation: draw 4s ease-out infinite; }
+    @keyframes draw { 0% { stroke-dashoffset: 220; } 60%, 100% { stroke-dashoffset: 0; } }
+    .c-trend b { display: block; margin-top: 6px; font-family: var(--display); }
+    .dot { width: 10px; height: 10px; border-radius: 50%; background: var(--mint); animation: lamp 12s steps(1) infinite; }
+    @keyframes lamp { 0% { background: var(--mint); } 33.4% { background: var(--sun); } 66.7% { background: var(--flag); } }
+    .state::after { content: "Safe to publish"; animation: word 12s steps(1) infinite; }
+    @keyframes word { 0% { content: "Safe to publish"; } 33.4% { content: "Needs review"; } 66.7% { content: "Flagged"; } }
+    .conf { position: absolute; z-index: 2; border-radius: 50%; animation: drift 9s ease-in-out infinite; }
+    .conf:nth-of-type(1) { width: 14px; height: 14px; background: var(--peach); left: 24%; top: 4%; }
+    .conf:nth-of-type(2) { width: 10px; height: 10px; background: var(--sun); right: 26%; top: 2%; animation-delay: -3s; }
+    .conf:nth-of-type(3) { width: 18px; height: 18px; background: var(--lilac); right: 10%; bottom: 34%; animation-delay: -5s; opacity: .7; }
+    @keyframes drift { 50% { transform: translate(16px, -24px); } }
+
+    /* ============ Right: form ============ */
+    .panel { display: flex; align-items: center; justify-content: center; padding: 40px 24px; position: relative; }
+    .card { width: 100%; max-width: 410px; background: var(--white); border: 1px solid var(--line); border-radius: 28px; padding: 40px 36px; box-shadow: var(--shadow);
+            animation: enter .9s cubic-bezier(.2,.8,.2,1) both; }
+    @keyframes enter { from { opacity: 0; transform: translateY(30px) scale(.97); } }
+    .badge { width: 62px; height: 62px; border-radius: 20px; display: grid; place-items: center; margin-bottom: 20px; position: relative;
+             background: linear-gradient(135deg, #e7eeff, #dcf6ec); }
+    .badge svg { width: 32px; height: 32px; position: relative; z-index: 1; }
+    .badge::before, .badge::after { content: ""; position: absolute; inset: 0; border-radius: 20px; border: 2px solid var(--mint); animation: ring 3s ease-out infinite; }
+    .badge::after { animation-delay: 1.5s; }
+    @keyframes ring { from { transform: scale(1); opacity: .8; } to { transform: scale(1.6); opacity: 0; } }
+    .card h1 { font-size: 1.9rem; line-height: 1.1; margin-bottom: 8px; }
+    .sub { margin: 0 0 26px; color: var(--muted); line-height: 1.5; }
+    .field, .submit, .note, .alert { animation: enter .7s cubic-bezier(.2,.8,.2,1) both; }
+    .field:nth-of-type(1) { animation-delay: .15s; } .field:nth-of-type(2) { animation-delay: .25s; } .submit { animation-delay: .35s; } .note { animation-delay: .45s; }
+    .alert { padding: 12px 14px; margin-bottom: 20px; border-radius: 12px; font-size: .92rem; line-height: 1.4; border: 1px solid #ffc9c9; background: #fff0f0; color: #a63b3b;
+             animation: enter .5s both, shake .5s .3s; }
+    .alert.success { border-color: #b9ecd9; background: #e9faf3; color: #1f7a5c; } .alert.info { border-color: #c9d8ff; background: #eef3ff; color: #2e4fa8; }
+    @keyframes shake { 20%, 60% { transform: translateX(-6px); } 40%, 80% { transform: translateX(6px); } }
+    .field { margin-bottom: 18px; }
+    label { display: block; font-weight: 600; font-size: .92rem; margin-bottom: 6px; }
+    .control { position: relative; }
+    input { width: 100%; font: inherit; color: var(--ink); background: var(--bg); border: 1.5px solid var(--line); border-radius: 14px; padding: 14px 16px; transition: border-color .2s, box-shadow .2s, background .2s; }
+    input:hover { border-color: #b9c4e6; }
+    input:focus { outline: none; background: #fff; border-color: var(--blue); box-shadow: 0 0 0 4px rgba(95,133,255,.18); }
+    .control input { padding-right: 76px; }
+    .toggle { position: absolute; right: 8px; top: 50%; transform: translateY(-50%); border: 0; background: transparent; color: var(--blue-d); font: inherit; font-size: .85rem; font-weight: 700; padding: 8px 10px; border-radius: 8px; cursor: pointer; }
+    .toggle:hover { background: #e9efff; }
+    .submit { position: relative; overflow: hidden; width: 100%; margin-top: 6px; font: inherit; font-weight: 700; font-size: 1rem; color: #fff; border: 0; border-radius: 14px; padding: 15px 16px; cursor: pointer;
+              background: linear-gradient(120deg, var(--blue), #8f7bff); box-shadow: 0 10px 24px rgba(95,133,255,.38); transition: transform .2s, box-shadow .2s; }
+    .submit:hover { transform: translateY(-2px); box-shadow: 0 14px 30px rgba(95,133,255,.46); }
+    .submit::after { content: ""; position: absolute; top: 0; bottom: 0; width: 36%; left: -60%; transform: skewX(-20deg); background: rgba(255,255,255,.35); animation: shine 3.6s ease-in-out infinite; }
+    @keyframes shine { 0%, 55% { left: -60%; } 100% { left: 130%; } }
+    .submit[disabled] { opacity: .75; cursor: progress; transform: none; }
+    .ripple { position: absolute; border-radius: 50%; background: rgba(255,255,255,.5); transform: scale(0); animation: rip .6s ease-out forwards; pointer-events: none; }
+    @keyframes rip { to { transform: scale(4); opacity: 0; } }
+    .note { margin: 22px 0 0; font-size: .85rem; color: var(--muted); line-height: 1.5; text-align: center; }
+    .back { position: absolute; top: 24px; right: 28px; font-size: .9rem; font-weight: 600; color: var(--muted); text-decoration: none; }
+    .back:hover { color: var(--ink); }
+
+    @media (max-width: 1100px) { .c-audio, .c-trend { display: none; } .side { padding: 36px 28px; } }
+    @media (max-width: 860px) { body { grid-template-columns: 1fr; } .side { display: none; } }
+    @media (max-width: 460px) { .card { padding: 32px 22px; } }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation: none !important; transition: none !important; }
+      .scan { top: 50%; } .box, .says div { opacity: 1; } .c-trend .path { stroke-dashoffset: 0; } .wave i { transform: scaleY(.6); }
+    }
+  </style>
+</head>
+<body>
+
+  <aside class="side" aria-hidden="true">
+    <div class="brand">
+      <svg viewBox="0 0 32 32"><defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#5f85ff"/><stop offset="1" stop-color="#5fd3b0"/></linearGradient></defs>
+        <path d="M16 2l11 4v9c0 7-5 12-11 15C10 27 5 22 5 15V6z" fill="url(#lg)"/><path d="M12 15l3 3 6-6" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Social Intelligent and Safety Guard
+    </div>
+
+    <div class="stage">
+      <div class="blob b1"></div><div class="blob b2"></div>
+      <span class="conf"></span><span class="conf"></span><span class="conf"></span>
+
+      <div class="phone">
+        <svg viewBox="0 0 184 368" preserveAspectRatio="xMidYMid slice">
+          <defs><linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#9db6ff"/><stop offset=".62" stop-color="#e3d4ff"/><stop offset="1" stop-color="#ffd9c7"/></linearGradient></defs>
+          <rect width="184" height="368" fill="url(#sky)"/>
+          <circle cx="138" cy="104" r="22" fill="#fff3c4"/>
+          <path d="M0 276 Q54 228 104 262 T184 246 V368 H0Z" fill="#7fb3e8"/>
+          <path d="M0 320 Q66 286 126 314 T184 300 V368 H0Z" fill="#5f8fd6"/>
+          <circle cx="92" cy="156" r="15" fill="#33407a"/>
+          <path d="M64 276 Q66 188 92 184 Q118 188 120 276Z" fill="#33407a"/>
+          <rect x="22" y="66" width="140" height="22" rx="5" fill="rgba(255,255,255,.95)"/><rect x="30" y="73" width="80" height="8" rx="3" fill="#5f85ff"/>
+          <rect x="16" y="330" width="104" height="6" rx="3" fill="rgba(255,255,255,.9)"/><rect x="16" y="341" width="66" height="6" rx="3" fill="rgba(255,255,255,.55)"/>
+          <circle cx="158" cy="310" r="8" fill="rgba(255,255,255,.9)"/><circle cx="158" cy="332" r="8" fill="rgba(255,255,255,.65)"/>
+        </svg>
+        <div class="box text"><span>OCR text</span></div>
+        <div class="box person"><span>person 98%</span></div>
+        <div class="scan"></div>
+      </div>
+
+      <div class="fc c-audio"><h4>Audio to text</h4>
+        <div class="wave"><i style="--d:0s"></i><i style="--d:.15s"></i><i style="--d:.3s"></i><i style="--d:.1s"></i><i style="--d:.4s"></i><i style="--d:.2s"></i><i style="--d:.5s"></i><i style="--d:.05s"></i><i style="--d:.35s"></i></div>
+        <div class="says"><div>"Hey everyone,"</div><div>"today we cover"</div><div>"study tips"</div></div></div>
+      <div class="fc c-trend"><h4>Trend and reach</h4>
+        <svg viewBox="0 0 140 50" fill="none"><path d="M2 45 L30 36 L52 40 L80 21 L104 25 L136 5" stroke="#5f85ff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="path"/></svg>
+        <b>Trend score 87</b></div>
+      <div class="fc c-verdict"><span class="dot"></span><span class="state"></span></div>
+      <div class="fc c-reach">Predicted reach <b>12.4K</b></div>
+    </div>
+
+    <div>
+      <h2>Every reel checked before it reaches anyone.</h2>
+      <p>Video, audio and images are read, scored for safety and trends, then approved, reviewed or restricted.</p>
+    </div>
+  </aside>
+
+  <main class="panel">
+    <!-- NOTE: change this URL to your public home page -->
+    <a class="back" href="/myapp/home/">Back to home</a>
+
+    <div class="card">
+      <div class="badge" aria-hidden="true">
+        <svg viewBox="0 0 32 32"><path d="M16 2l11 4v9c0 7-5 12-11 15C10 27 5 22 5 15V6z" fill="#5fd3b0"/><path d="M12 15l3 3 6-6" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      <h1>Admin sign in</h1>
+      <p class="sub">Use your administrator account to open the dashboard.</p>
+
+      {% if messages %}
+        {% for message in messages %}
+          <div class="alert {{ message.tags }}" role="alert">{{ message }}</div>
+        {% endfor %}
+      {% endif %}
+
+      <form method="POST" action="/myapp/login_page/" id="loginForm" novalidate>
+        {% csrf_token %}
+        <div class="field">
+          <label for="username">Username</label>
+          <input type="text" id="username" name="username" autocomplete="username" autofocus required>
+        </div>
+        <div class="field">
+          <label for="password">Password</label>
+          <div class="control">
+            <input type="password" id="password" name="password" autocomplete="current-password" required>
+            <button type="button" class="toggle" id="toggle" aria-controls="password" aria-pressed="false">Show</button>
+          </div>
+        </div>
+        <button type="submit" class="submit" id="submitBtn">Sign in</button>
+      </form>
+
+      <p class="note">Only accounts in the Admin group can sign in here.</p>
+    </div>
+  </main>
+
+  <script>
+    (function () {
+      var pw = document.getElementById('password'), toggle = document.getElementById('toggle'),
+          form = document.getElementById('loginForm'), btn = document.getElementById('submitBtn');
+      toggle.addEventListener('click', function () {
+        var show = pw.type === 'password';
+        pw.type = show ? 'text' : 'password';
+        toggle.textContent = show ? 'Hide' : 'Show';
+        toggle.setAttribute('aria-pressed', show ? 'true' : 'false');
+      });
+      btn.addEventListener('click', function (e) {
+        var r = btn.getBoundingClientRect(), s = document.createElement('span'), d = Math.max(r.width, r.height);
+        s.className = 'ripple'; s.style.cssText = 'width:' + d + 'px;height:' + d + 'px;left:' + (e.clientX - r.left - d / 2) + 'px;top:' + (e.clientY - r.top - d / 2) + 'px';
+        btn.appendChild(s); setTimeout(function () { s.remove(); }, 650);
+      });
+      form.addEventListener('submit', function (e) {
+        if (!form.username.value.trim() || !pw.value) {
+          e.preventDefault();
+          (form.username.value.trim() ? pw : form.username).focus();
+          return;
+        }
+        btn.disabled = true; btn.textContent = 'Signing in...';
+      });
+    })();
+  </script>
+</body>
+</html>
