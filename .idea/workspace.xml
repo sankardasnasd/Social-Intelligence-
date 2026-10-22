@@ -1,7 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="a9d1b731-a0c9-46d7-91ef-c6b3709c28a9" name="Default" comment="" />
+    <list default="true" id="a9d1b731-a0c9-46d7-91ef-c6b3709c28a9" name="Default" comment="">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/vcs.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/templates/admin/reply_complaint.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/myapp/models.py" afterPath="$PROJECT_DIR$/myapp/models.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/myapp/urls.py" afterPath="$PROJECT_DIR$/myapp/urls.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/myapp/views.py" afterPath="$PROJECT_DIR$/myapp/views.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/templates/admin/admin_home sub.html" afterPath="$PROJECT_DIR$/templates/admin/admin_home sub.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/templates/admin/view_complaints.html" afterPath="$PROJECT_DIR$/templates/admin/view_complaints.html" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -12,35 +21,56 @@
   <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="views.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="views.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/myapp/views.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1428">
-              <caret line="171" column="0" lean-forward="true" selection-start-line="171" selection-start-column="0" selection-end-line="171" selection-end-column="0" />
+            <state relative-caret-position="240">
+              <caret line="588" column="0" lean-forward="false" selection-start-line="588" selection-start-column="0" selection-end-line="892" selection-end-column="0" />
               <folding>
                 <element signature="e#0#35#0" expanded="true" />
                 <element signature="e#490#1239#0" expanded="false" />
                 <element signature="e#1271#1317#0" expanded="false" />
-                <element signature="e#5834#6824#0" expanded="false" />
-                <element signature="e#6568#6718#0" expanded="false" />
-                <element signature="e#6860#8114#0" expanded="false" />
-                <element signature="e#8149#9475#0" expanded="false" />
-                <element signature="e#9511#13116#0" expanded="false" />
-                <element signature="e#13742#14059#0" expanded="false" />
-                <element signature="e#14100#14396#0" expanded="false" />
-                <element signature="e#14437#15116#0" expanded="false" />
+                <element signature="e#6041#7031#0" expanded="false" />
+                <element signature="e#6775#6925#0" expanded="false" />
+                <element signature="e#7067#8321#0" expanded="false" />
+                <element signature="e#8356#9682#0" expanded="false" />
+                <element signature="e#9718#13323#0" expanded="false" />
+                <element signature="e#13949#14266#0" expanded="false" />
+                <element signature="e#14307#14603#0" expanded="false" />
+                <element signature="e#14644#15323#0" expanded="false" />
+                <element signature="e#15558#17395#0" expanded="false" />
+                <element signature="e#17454#18701#0" expanded="false" />
+                <element signature="e#18750#19792#0" expanded="false" />
+                <element signature="e#19829#21326#0" expanded="false" />
+                <element signature="e#21363#22796#0" expanded="false" />
+                <element signature="e#22837#23774#0" expanded="false" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="view_complaints.html" pinned="false" current-in-tab="true">
+      <file leaf-file-name="reply_complaint.html" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/templates/admin/reply_complaint.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="581">
+              <caret line="101" column="14" lean-forward="false" selection-start-line="101" selection-start-column="14" selection-end-line="101" selection-end-column="14" />
+              <folding>
+                <element signature="e#3239#3245#0#HTML" expanded="true" />
+                <element signature="e#3246#3252#0#HTML" expanded="true" />
+                <element signature="e#3309#3315#0#HTML" expanded="true" />
+                <element signature="e#3316#3322#0#HTML" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="view_complaints.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/templates/admin/view_complaints.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="398">
-              <caret line="451" column="14" lean-forward="false" selection-start-line="451" selection-start-column="14" selection-end-line="451" selection-end-column="14" />
+            <state relative-caret-position="278">
+              <caret line="116" column="25" lean-forward="false" selection-start-line="116" selection-start-column="25" selection-end-line="116" selection-end-column="25" />
               <folding>
-                <element signature="e#10045#10073#0#HTML" expanded="true" />
+                <element signature="e#6922#6949#0#HTML" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -49,8 +79,8 @@
       <file leaf-file-name="admin_home sub.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/templates/admin/admin_home sub.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="270">
-              <caret line="226" column="7" lean-forward="true" selection-start-line="226" selection-start-column="7" selection-end-line="226" selection-end-column="7" />
+            <state relative-caret-position="152">
+              <caret line="202" column="89" lean-forward="false" selection-start-line="202" selection-start-column="80" selection-end-line="202" selection-end-column="89" />
               <folding />
             </state>
           </provider>
@@ -59,8 +89,8 @@
       <file leaf-file-name="urls.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/myapp/urls.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="152">
-              <caret line="18" column="40" lean-forward="false" selection-start-line="18" selection-start-column="40" selection-end-line="18" selection-end-column="40" />
+            <state relative-caret-position="218">
+              <caret line="44" column="45" lean-forward="false" selection-start-line="44" selection-start-column="45" selection-end-line="44" selection-end-column="45" />
               <folding>
                 <element signature="e#1#43#0" expanded="true" />
               </folding>
@@ -71,11 +101,12 @@
       <file leaf-file-name="models.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/myapp/models.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="239">
-              <caret line="220" column="10" lean-forward="false" selection-start-line="220" selection-start-column="4" selection-end-line="220" selection-end-column="10" />
+            <state relative-caret-position="169">
+              <caret line="25" column="3" lean-forward="true" selection-start-line="25" selection-start-column="0" selection-end-line="40" selection-end-column="0" />
               <folding>
                 <element signature="e#1#29#0" expanded="true" />
                 <element signature="e#184#893#0" expanded="false" />
+                <element signature="e#931#1307#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -101,9 +132,13 @@
       <find>view_complaints</find>
       <find>{% for i in reels %}</find>
       <find>reel</find>
-      <find>feed</find>
       <find>Reply to complaint</find>
+      <find>afternoon</find>
+      <find>feed</find>
     </findStrings>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
@@ -117,11 +152,12 @@
         <option value="$PROJECT_DIR$/templates/admin/admin_home.html" />
         <option value="$PROJECT_DIR$/SOCIAL_INTELLIGENT_AND_SAFETY/settings.py" />
         <option value="$PROJECT_DIR$/templates/publicpage.html" />
-        <option value="$PROJECT_DIR$/myapp/urls.py" />
-        <option value="$PROJECT_DIR$/myapp/models.py" />
-        <option value="$PROJECT_DIR$/myapp/views.py" />
+        <option value="$PROJECT_DIR$/templates/admin/reply_complaint.html" />
         <option value="$PROJECT_DIR$/templates/admin/admin_home sub.html" />
         <option value="$PROJECT_DIR$/templates/admin/view_complaints.html" />
+        <option value="$PROJECT_DIR$/myapp/models.py" />
+        <option value="$PROJECT_DIR$/myapp/urls.py" />
+        <option value="$PROJECT_DIR$/myapp/views.py" />
       </list>
     </option>
   </component>
@@ -137,6 +173,7 @@
     <option name="width" value="1918" />
     <option name="height" value="1017" />
   </component>
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
     <navigator currentView="ProjectPane" proportions="" version="1">
       <flattenPackages />
@@ -260,6 +297,28 @@
             <PATH_ELEMENT>
               <option name="myItemId" value="models.py" />
               <option name="myItemType" value="com.jetbrains.python.projectView.PyFileNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="SOCIAL_INTELLIGENT_AND_SAFETY" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="SOCIAL_INTELLIGENT_AND_SAFETY" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="myapp" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="models.py" />
+              <option name="myItemType" value="com.jetbrains.python.projectView.PyFileNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Follow" />
+              <option name="myItemType" value="com.jetbrains.python.projectView.PyElementNode" />
             </PATH_ELEMENT>
           </PATH>
         </subPane>
@@ -499,17 +558,16 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="3" y="10" width="1918" height="1017" extended-state="0" />
-    <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24972856" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3298122" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3298122" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3298122" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
       <window_info id="Data View" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
@@ -538,7 +596,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/myapp/views.py</url>
-          <line>505</line>
+          <line>504</line>
           <option name="timeStamp" value="2" />
         </line-breakpoint>
       </breakpoints>
@@ -638,61 +696,81 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/myapp/urls.py">
+    <entry file="file://$PROJECT_DIR$/templates/admin/reply_complaint.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="152">
-          <caret line="18" column="40" lean-forward="false" selection-start-line="18" selection-start-column="40" selection-end-line="18" selection-end-column="40" />
+        <state relative-caret-position="581">
+          <caret line="101" column="14" lean-forward="false" selection-start-line="101" selection-start-column="14" selection-end-line="101" selection-end-column="14" />
           <folding>
-            <element signature="e#1#43#0" expanded="true" />
+            <element signature="e#3239#3245#0#HTML" expanded="true" />
+            <element signature="e#3246#3252#0#HTML" expanded="true" />
+            <element signature="e#3309#3315#0#HTML" expanded="true" />
+            <element signature="e#3316#3322#0#HTML" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/myapp/models.py">
+    <entry file="file://$PROJECT_DIR$/templates/admin/view_complaints.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="239">
-          <caret line="220" column="10" lean-forward="false" selection-start-line="220" selection-start-column="4" selection-end-line="220" selection-end-column="10" />
+        <state relative-caret-position="278">
+          <caret line="116" column="25" lean-forward="false" selection-start-line="116" selection-start-column="25" selection-end-line="116" selection-end-column="25" />
           <folding>
-            <element signature="e#1#29#0" expanded="true" />
-            <element signature="e#184#893#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/myapp/views.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1428">
-          <caret line="171" column="0" lean-forward="true" selection-start-line="171" selection-start-column="0" selection-end-line="171" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#35#0" expanded="true" />
-            <element signature="e#490#1239#0" expanded="false" />
-            <element signature="e#1271#1317#0" expanded="false" />
-            <element signature="e#5834#6824#0" expanded="false" />
-            <element signature="e#6568#6718#0" expanded="false" />
-            <element signature="e#6860#8114#0" expanded="false" />
-            <element signature="e#8149#9475#0" expanded="false" />
-            <element signature="e#9511#13116#0" expanded="false" />
-            <element signature="e#13742#14059#0" expanded="false" />
-            <element signature="e#14100#14396#0" expanded="false" />
-            <element signature="e#14437#15116#0" expanded="false" />
+            <element signature="e#6922#6949#0#HTML" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/templates/admin/admin_home sub.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="270">
-          <caret line="226" column="7" lean-forward="true" selection-start-line="226" selection-start-column="7" selection-end-line="226" selection-end-column="7" />
+        <state relative-caret-position="152">
+          <caret line="202" column="89" lean-forward="false" selection-start-line="202" selection-start-column="80" selection-end-line="202" selection-end-column="89" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/templates/admin/view_complaints.html">
+    <entry file="file://$PROJECT_DIR$/myapp/models.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="398">
-          <caret line="451" column="14" lean-forward="false" selection-start-line="451" selection-start-column="14" selection-end-line="451" selection-end-column="14" />
+        <state relative-caret-position="169">
+          <caret line="25" column="3" lean-forward="true" selection-start-line="25" selection-start-column="0" selection-end-line="40" selection-end-column="0" />
           <folding>
-            <element signature="e#10045#10073#0#HTML" expanded="true" />
+            <element signature="e#1#29#0" expanded="true" />
+            <element signature="e#184#893#0" expanded="false" />
+            <element signature="e#931#1307#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/myapp/urls.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="218">
+          <caret line="44" column="45" lean-forward="false" selection-start-line="44" selection-start-column="45" selection-end-line="44" selection-end-column="45" />
+          <folding>
+            <element signature="e#1#43#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/myapp/views.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="240">
+          <caret line="588" column="0" lean-forward="false" selection-start-line="588" selection-start-column="0" selection-end-line="892" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#35#0" expanded="true" />
+            <element signature="e#490#1239#0" expanded="false" />
+            <element signature="e#1271#1317#0" expanded="false" />
+            <element signature="e#6041#7031#0" expanded="false" />
+            <element signature="e#6775#6925#0" expanded="false" />
+            <element signature="e#7067#8321#0" expanded="false" />
+            <element signature="e#8356#9682#0" expanded="false" />
+            <element signature="e#9718#13323#0" expanded="false" />
+            <element signature="e#13949#14266#0" expanded="false" />
+            <element signature="e#14307#14603#0" expanded="false" />
+            <element signature="e#14644#15323#0" expanded="false" />
+            <element signature="e#15558#17395#0" expanded="false" />
+            <element signature="e#17454#18701#0" expanded="false" />
+            <element signature="e#18750#19792#0" expanded="false" />
+            <element signature="e#19829#21326#0" expanded="false" />
+            <element signature="e#21363#22796#0" expanded="false" />
+            <element signature="e#22837#23774#0" expanded="false" />
           </folding>
         </state>
       </provider>

@@ -1,0 +1,102 @@
+{% extends 'admin/admin_home sub.html' %}
+{% block body %}
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+    :root {
+        --bg: #f5f7fd; --white: #fff; --ink: #1f2a4d; --muted: #5f6b8c; --line: #dde3f3;
+        --blue: #5f85ff; --blue-d: #4569e0; --violet: #8f7bff;
+        --shadow: 0 20px 50px rgba(54, 73, 140, 0.12);
+        --display: "Outfit", system-ui, sans-serif;
+        --body: "Manrope", system-ui, sans-serif;
+    }
+    body { background: var(--bg) !important; font-family: var(--body); color: var(--ink); }
+    .page-wrap { padding: 28px 20px; max-width: 720px; margin: 0 auto; }
+    .page-title {
+        font-family: var(--display); font-weight: 700; font-size: 1.6rem;
+        color: var(--ink); margin: 0 0 6px; display: flex; align-items: center; gap: 12px;
+    }
+    .page-title i { color: var(--blue); }
+    .page-sub { color: var(--muted); margin-bottom: 24px; }
+    .card-box {
+        background: var(--white); border: 1px solid var(--line);
+        border-radius: 24px; box-shadow: var(--shadow); padding: 28px;
+    }
+    .complaint-box {
+        background: var(--bg); border: 1.5px solid var(--line);
+        border-radius: 16px; padding: 16px 18px; margin-bottom: 22px; line-height: 1.55;
+    }
+    .complaint-box .label {
+        font-size: 0.8rem; font-weight: 700; color: var(--muted);
+        text-transform: uppercase; letter-spacing: 0.03em; margin-bottom: 6px;
+    }
+    textarea.form-control {
+        border: 1.5px solid var(--line); border-radius: 14px;
+        padding: 14px 16px; font-family: var(--body); color: var(--ink);
+        background: var(--bg); resize: vertical; min-height: 140px;
+    }
+    textarea.form-control:focus {
+        background: #fff; border-color: var(--blue);
+        box-shadow: 0 0 0 4px rgba(95,133,255,0.18);
+    }
+    .btn-send {
+        background: linear-gradient(120deg, var(--blue-d), var(--violet));
+        border: none; border-radius: 14px; padding: 12px 26px;
+        font-weight: 700; color: #fff;
+        box-shadow: 0 10px 24px rgba(95,133,255,0.38);
+    }
+    .btn-send:hover { color: #fff; }
+    .btn-back {
+        border: 1.5px solid var(--line); border-radius: 14px;
+        padding: 12px 22px; font-weight: 600; color: var(--muted); background: transparent;
+    }
+    .btn-back:hover { background: var(--bg); color: var(--ink); }
+    .meta { color: var(--muted); font-size: 0.9rem; margin-bottom: 18px; }
+</style>
+
+<div class="page-wrap">
+    <h3 class="page-title">
+        <i class="fa-solid fa-reply"></i> Reply to Complaint
+    </h3>
+    <p class="page-sub">Write your response below and send it to the user.</p>
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+
+    <div class="card-box">
+        <div class="meta">
+            <strong>Complaint #{{ complaint.id }}</strong> &nbsp;|&nbsp;
+            From: <strong>{{ complaint.user }}</strong> &nbsp;|&nbsp;
+            {{ complaint.created_at|date:"d M Y, h:i A" }}
+        </div>
+
+        <div class="complaint-box">
+            <div class="label">User Complaint</div>
+            {{ complaint.complaint_text }}
+        </div>
+
+        <form method="POST">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label class="form-label fw-bold">Your Reply</label>
+                <textarea name="reply" class="form-control" rows="6"
+                          placeholder="Type your reply here..." required></textarea>
+            </div>
+            <div class="d-flex gap-2 justify-content-end">
+                <a href="{% url 'view_complaints' %}" class="btn btn-back">Cancel</a>
+                <button type="submit" class="btn btn-send">
+                    <i class="fa-solid fa-paper-plane me-1"></i> Send Reply
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+{% endblock %}

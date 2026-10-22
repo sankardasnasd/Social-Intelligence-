@@ -17,6 +17,7 @@ urlpatterns = [
     path('manage_users/', views.manage_users, name='manage_users'),
     path('view_reels/', views.view_reels, name='view_reels'),
     path('view_complaints/', views.view_complaints, name='view_complaints'),
+    path('reply_complaint/<int:complaint_id>', views.reply_complaint, name='reply_complaint'),
     path('view_feedback/', views.view_feedback, name='view_feedback'),
 
 
@@ -40,5 +41,13 @@ urlpatterns = [
     path('user_send_feedback/', views.user_send_feedback, name='user_send_feedback'),
     path('user_send_complaint/', views.user_send_complaint, name='user_send_complaint'),
     path('user_view_complaints/', views.user_view_complaints, name='user_view_complaints'),
+
+    path('view_other_users/', views.view_other_users),
+    path('user_follow/', views.user_follow),
+    path('user_unfollow/', views.user_unfollow),
+    path('view_followers/', views.view_followers),
+    path('view_following/', views.view_following),
+    path('view_follow_counts/', views.view_follow_counts),
+
 
 ]

@@ -123,53 +123,52 @@ from django.utils import timezone
 from .models import Complaint
 
 
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib import messages
+from django.utils import timezone
+from .models import Complaint
+
+
 @login_required
 def view_complaints(request):
-
-    if request.method == 'POST':
-        complaint_id = request.POST.get('complaint_id')
-        reply = request.POST.get('reply', '').strip()
-
-        complaint = get_object_or_404(
-            Complaint,
-            id=complaint_id,
-            status='pending'
-        )
-
-        if reply:
-            complaint.reply_text = reply
-            complaint.status = 'in_progress'
-            complaint.replied_by = request.user
-            complaint.replied_at = timezone.now()
-
-            complaint.save()
-
-            messages.success(
-                request,
-                'Reply sent successfully!'
-            )
-        else:
-            messages.error(
-                request,
-                'Please enter a reply.'
-            )
-
-        return redirect('/myapp/view_complaints/')
-
     complaints = (
         Complaint.objects
         .select_related('user', 'replied_by')
         .order_by('-created_at')
     )
+    return render(request, 'admin/view_complaints.html', {
+        'complaints': complaints
+    })
 
-    return render(
-        request,
-        'admin/view_complaints.html',
-        {
-            'complaints': complaints
-        }
+
+@login_required
+def reply_complaint(request, complaint_id):
+    complaint = get_object_or_404(
+        Complaint,
+        id=complaint_id,
+        status='pending'
     )
 
+    if request.method == 'POST':
+        reply = request.POST.get('reply', '').strip()
+
+        if not reply:
+            messages.error(request, 'Reply cannot be empty.')
+            return redirect('reply_complaint', complaint_id=complaint.id)
+
+        complaint.reply_text = reply
+        complaint.status = 'in_progress'
+        complaint.replied_by = request.user
+        complaint.replied_at = timezone.now()
+        complaint.save()
+
+        messages.success(request, 'Reply sent successfully.')
+        return redirect('view_complaints')
+
+    return render(request, 'admin/reply_complaint.html', {
+        'complaint': complaint
+    })
 
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
@@ -578,4 +577,316 @@ def user_view_complaints(request):
     return JsonResponse({
         'status': 'ok',
         'data': data
+    })
+
+
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth.models import User
+from .models import User_Table, Follow
+
+
+# 1. View Other Users
+def view_other_users(request):
+    if request.method == 'GET':
+        lid = request.GET.get('lid')
+
+        if not lid:
+            return JsonResponse({
+                'status': 'error',
+                'message': 'Login ID is required'
+            })
+
+        try:
+            current_user = User_Table.objects.get(LOGIN_id=lid)
+        except User_Table.DoesNotExist:
+            return JsonResponse({
+                'status': 'error',
+                'message': 'User not found'
+            })
+
+        users = User_Table.objects.exclude(
+            id=current_user.id
+        ).order_by('name')
+
+        data = []
+
+        for u in users:
+            is_following = Follow.objects.filter(
+                follower=current_user,
+                following=u
+            ).exists()
+
+            follows_you = Follow.objects.filter(
+                follower=u,
+                following=current_user
+            ).exists()
+
+            if is_following:
+                button = 'Following'
+            elif follows_you:
+                button = 'Follow Back'
+            else:
+                button = 'Follow'
+
+            data.append({
+                'id': u.id,
+                'login_id': u.LOGIN_id,
+                'name': u.name,
+                'profile_picture': request.build_absolute_uri(
+                    u.profile_picture.url
+                ) if u.profile_picture else '',
+                'region': u.region,
+                'place': u.place,
+                'district': u.district,
+                'is_following': is_following,
+                'follows_you': follows_you,
+                'button': button
+            })
+
+        return JsonResponse({
+            'status': 'ok',
+            'count': len(data),
+            'data': data
+        })
+
+    return JsonResponse({
+        'status': 'error',
+        'message': 'GET method required'
+    })
+
+
+# 2. Follow / Follow Back
+def user_follow(request):
+    if request.method == 'POST':
+        lid = request.POST.get('lid')
+        user_id = request.POST.get('user_id')
+
+        if not lid or not user_id:
+            return JsonResponse({
+                'status': 'error',
+                'message': 'lid and user_id are required'
+            })
+
+        try:
+            follower = User_Table.objects.get(LOGIN_id=lid)
+            following = User_Table.objects.get(id=user_id)
+        except User_Table.DoesNotExist:
+            return JsonResponse({
+                'status': 'error',
+                'message': 'User not found'
+            })
+
+        if follower.id == following.id:
+            return JsonResponse({
+                'status': 'error',
+                'message': 'You cannot follow yourself'
+            })
+
+        obj, created = Follow.objects.get_or_create(
+            follower=follower,
+            following=following
+        )
+
+        return JsonResponse({
+            'status': 'ok',
+            'message': 'Followed successfully' if created
+                       else 'Already following',
+            'is_following': True,
+            'button': 'Following'
+        })
+
+    return JsonResponse({
+        'status': 'error',
+        'message': 'POST method required'
+    })
+
+
+# 3. Unfollow
+def user_unfollow(request):
+    if request.method == 'POST':
+        lid = request.POST.get('lid')
+        user_id = request.POST.get('user_id')
+
+        if not lid or not user_id:
+            return JsonResponse({
+                'status': 'error',
+                'message': 'lid and user_id are required'
+            })
+
+        try:
+            current_user = User_Table.objects.get(LOGIN_id=lid)
+        except User_Table.DoesNotExist:
+            return JsonResponse({
+                'status': 'error',
+                'message': 'User not found'
+            })
+
+        deleted_count, _ = Follow.objects.filter(
+            follower=current_user,
+            following_id=user_id
+        ).delete()
+
+        return JsonResponse({
+            'status': 'ok',
+            'message': 'Unfollowed successfully'
+                       if deleted_count else 'You are not following this user',
+            'is_following': False,
+            'button': 'Follow'
+        })
+
+    return JsonResponse({
+        'status': 'error',
+        'message': 'POST method required'
+    })
+
+
+
+def view_followers(request):
+    if request.method == 'GET':
+        lid = request.GET.get('lid')
+
+        if not lid:
+            return JsonResponse({
+                'status': 'error',
+                'message': 'Login ID is required'
+            })
+
+        try:
+            current_user = User_Table.objects.get(LOGIN_id=lid)
+        except User_Table.DoesNotExist:
+            return JsonResponse({
+                'status': 'error',
+                'message': 'User not found'
+            })
+
+        follows = Follow.objects.filter(
+            following=current_user
+        ).select_related('follower').order_by('-created_at')
+
+        data = []
+
+        for f in follows:
+            u = f.follower
+
+            is_following = Follow.objects.filter(
+                follower=current_user,
+                following=u
+            ).exists()
+
+            data.append({
+                'id': u.id,
+                'login_id': u.LOGIN_id,
+                'name': u.name,
+                'profile_picture': request.build_absolute_uri(
+                    u.profile_picture.url
+                ) if u.profile_picture else '',
+                'is_following': is_following,
+                'follows_you': True,
+                'button': 'Following' if is_following else 'Follow Back'
+            })
+
+        return JsonResponse({
+            'status': 'ok',
+            'count': len(data),
+            'data': data
+        })
+
+    return JsonResponse({
+        'status': 'error',
+        'message': 'GET method required'
+    })
+
+
+
+def view_following(request):
+    if request.method == 'GET':
+        lid = request.GET.get('lid')
+
+        if not lid:
+            return JsonResponse({
+                'status': 'error',
+                'message': 'Login ID is required'
+            })
+
+        try:
+            current_user = User_Table.objects.get(LOGIN_id=lid)
+        except User_Table.DoesNotExist:
+            return JsonResponse({
+                'status': 'error',
+                'message': 'User not found'
+            })
+
+        follows = Follow.objects.filter(
+            follower=current_user
+        ).select_related('following').order_by('-created_at')
+
+        data = []
+
+        for f in follows:
+            u = f.following
+
+            data.append({
+                'id': u.id,
+                'login_id': u.LOGIN_id,
+                'name': u.name,
+                'profile_picture': request.build_absolute_uri(
+                    u.profile_picture.url
+                ) if u.profile_picture else '',
+                'is_following': True,
+                'follows_you': Follow.objects.filter(
+                    follower=u,
+                    following=current_user
+                ).exists(),
+                'button': 'Unfollow'
+            })
+
+        return JsonResponse({
+            'status': 'ok',
+            'count': len(data),
+            'data': data
+        })
+
+    return JsonResponse({
+        'status': 'error',
+        'message': 'GET method required'
+    })
+
+
+
+def view_follow_counts(request):
+    if request.method == 'GET':
+        lid = request.GET.get('lid')
+
+        if not lid:
+            return JsonResponse({
+                'status': 'error',
+                'message': 'Login ID is required'
+            })
+
+        try:
+            current_user = User_Table.objects.get(LOGIN_id=lid)
+        except User_Table.DoesNotExist:
+            return JsonResponse({
+                'status': 'error',
+                'message': 'User not found'
+            })
+
+        followers_count = Follow.objects.filter(
+            following=current_user
+        ).count()
+
+        following_count = Follow.objects.filter(
+            follower=current_user
+        ).count()
+
+        return JsonResponse({
+            'status': 'ok',
+            'followers_count': followers_count,
+            'following_count': following_count
+        })
+
+    return JsonResponse({
+        'status': 'error',
+        'message': 'GET method required'
     })

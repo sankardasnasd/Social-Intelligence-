@@ -22,16 +22,22 @@ class User_Table(models.Model):
 
 
 
+
 class Follow(models.Model):
-    follower = models.ForeignKey(User_Table, on_delete=models.CASCADE, related_name='following_users')
-    following = models.ForeignKey(User_Table, on_delete=models.CASCADE, related_name='follower_users')
+    follower = models.ForeignKey(
+        User_Table,
+        on_delete=models.CASCADE,
+        related_name='following'
+    )
+    following = models.ForeignKey(
+        User_Table,
+        on_delete=models.CASCADE,
+        related_name='followers'
+    )
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        constraints = [
-            models.UniqueConstraint(fields=['follower', 'following'], name='unique_user_follow')
-        ]
-
+        unique_together = ('follower', 'following')
 
 class Reel(models.Model):
     MEDIA_TYPE_CHOICES = [('video', 'Video'), ('image', 'Image'), ('audio', 'Audio')]
